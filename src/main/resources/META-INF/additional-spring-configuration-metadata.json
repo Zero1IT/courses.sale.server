@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "host.domain",
+      "type": "java.lang.String",
+      "description": "Domain name."
+    },
+    {
+      "name": "host.link",
+      "type": "java.lang.String",
+      "description": "Full root link."
+    }
+  ]
+}
