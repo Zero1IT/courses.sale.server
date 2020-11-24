@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
  *
  * @author Alexander Petrushkin
  */
-@Service
 public interface EmailService {
     void sendActivationLink(String email, String link, TempUser user);
 }

@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
  *
  * @author Alexander Petrushkin
  */
-@Service
 public interface UserService {
-    TempUser generateTempUser(String email, String code);
-    void confirmVerification(String code);
+
 }

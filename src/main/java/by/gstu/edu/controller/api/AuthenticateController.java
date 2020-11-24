@@ -1,7 +1,7 @@
 package by.gstu.edu.controller.api;
 
+import by.gstu.edu.service.AuthenticateService;
 import by.gstu.edu.service.EmailService;
-import by.gstu.edu.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +21,14 @@ import java.util.UUID;
 public class AuthenticateController {
 
     private final EmailService emailService;
-    private final UserService userService;
+    private final AuthenticateService authenticateService;
 
     @Value("${host.link}")
     private String domain;
 
-    public AuthenticateController(EmailService emailService, UserService userService) {
+    public AuthenticateController(EmailService emailService, AuthenticateService authenticateService) {
         this.emailService = emailService;
-        this.userService = userService;
+        this.authenticateService = authenticateService;
     }
 
     @PostMapping("auto")
@@ -36,6 +36,6 @@ public class AuthenticateController {
     public void autoRegistration(@RequestParam @Pattern(regexp = "") String email) {
         String code = UUID.randomUUID().toString();
         String link = String.format("%s/verify/%s", domain, code);
-        emailService.sendActivationLink(email, link, userService.generateTempUser(email, code));
+        emailService.sendActivationLink(email, link, authenticateService.generateTempUser(email, code));
     }
 }

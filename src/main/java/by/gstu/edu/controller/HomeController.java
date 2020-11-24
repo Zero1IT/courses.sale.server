@@ -1,6 +1,6 @@
 package by.gstu.edu.controller;
 
-import by.gstu.edu.service.UserService;
+import by.gstu.edu.service.AuthenticateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class HomeController {
 
-    private final UserService userService;
+    private final AuthenticateService authenticateService;
 
-    public HomeController(UserService userService) {
-        this.userService = userService;
+    public HomeController(AuthenticateService authenticateService) {
+        this.authenticateService = authenticateService;
     }
 
     @GetMapping("/verify/{code}")
     public String emailRegistrationVerification(@PathVariable String code) {
-
+        authenticateService.confirmVerification(code);
         return "verify-page";
     }
 }

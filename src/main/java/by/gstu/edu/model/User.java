@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     private String id;
-    private Role role;
+    private Role role = Role.DEFAULT;
     private String login;
     private String email;
     private String password;

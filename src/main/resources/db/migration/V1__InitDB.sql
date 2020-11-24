@@ -1,4 +1,20 @@
-alter table _verifications drop foreign key FK_verify_temp_user;
+DELIMITER @
+DROP PROCEDURE IF EXISTS dropper@
+CREATE PROCEDURE dropper()
+BEGIN
+    IF EXISTS(SELECT table_name
+              FROM INFORMATION_SCHEMA.TABLES
+              WHERE table_schema = 'diploma'
+                AND table_name LIKE '_verifications')
+    THEN
+        alter table _verifications drop foreign key FK_verify_temp_user;
+    END IF;
+END@
+
+DELIMITER ;
+
+call dropper();
+
 drop table if exists _verifications;
 drop table if exists hibernate_sequence;
 drop table if exists temp_users_table;
