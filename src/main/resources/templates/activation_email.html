@@ -54,14 +54,14 @@
 <body>
 <div class="root">
     <div class="greeting">
-        <p>Hello, it's you activation link</p>
+        <p th:text="#{page.activation.greeting}"></p>
     </div>
     <div class="activation">
         <div class="credentials" th:if="${user != null}">
-            <p>You generated password: <span th:text="${user.getPassword()}"></span></p>
+            <p><span th:text="#{page.activation.password}"></span>: <span th:text="${user.getPassword()}"></span></p>
         </div>
         <a th:if="${link != null}" th:href="${link}">
-            <p class="a-link info">Click here to activate this account</p>
+            <p class="a-link info" th:text="#{page.activation.link}"></p>
         </a>
     </div>
 </div>

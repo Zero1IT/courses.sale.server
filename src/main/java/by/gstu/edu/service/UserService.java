@@ -12,4 +12,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
     TempUser generateTempUser(String email, String code);
+    void confirmVerification(String code);
 }
