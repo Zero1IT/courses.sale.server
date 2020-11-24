@@ -1,5 +1,7 @@
 package by.gstu.edu.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 /**
@@ -22,7 +24,8 @@ public class User {
     private boolean isConfirmed = false;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     public String getId() {
         return id;
     }
@@ -57,6 +60,7 @@ public class User {
         isConfirmed = confirmed;
     }
 
+    @Column(unique = true)
     public String getLogin() {
         return login;
     }

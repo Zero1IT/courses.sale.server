@@ -58,11 +58,7 @@ create table users
     primary key (id)
 ) engine = InnoDB;
 
-alter table _verifications
-    add constraint UK_verify_code unique (code);
-
-alter table users
-    add constraint UK_user_email unique (email);
-
-alter table _verifications
-    add constraint FK_verify_temp_user foreign key (user_id) references temp_users_table (id);
+alter table users add constraint UK_user_email unique (email);
+alter table users add constraint UK_user_login unique (login);
+alter table _verifications add constraint UK_verify_code unique (code);
+alter table _verifications add constraint FK_verify_temp_user foreign key (user_id) references temp_users_table (id);

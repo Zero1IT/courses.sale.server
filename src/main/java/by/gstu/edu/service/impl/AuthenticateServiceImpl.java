@@ -1,5 +1,6 @@
 package by.gstu.edu.service.impl;
 
+import by.gstu.edu.exception.UserExistsException;
 import by.gstu.edu.exception.VerificationException;
 import by.gstu.edu.model.TempUser;
 import by.gstu.edu.model.User;
@@ -39,6 +40,9 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 
     @Override
     public TempUser generateTempUser(String email, String code) {
+        if (userRepository.existsAnywhereByEmail(email)) {
+            throw new UserExistsException("User with current email already exists");
+        }
         TempUser user = new TempUser();
         user.setEmail(email);
         user.setLogin(randomService.randomLogin());

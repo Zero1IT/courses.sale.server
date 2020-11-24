@@ -1,5 +1,8 @@
 package by.gstu.edu.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
 /**
@@ -53,6 +56,7 @@ public class TempUser {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     public VerificationCode getVerificationCode() {
         return verificationCode;
     }
