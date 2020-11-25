@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.boot.autoconfigure.task.TaskSchedulingAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
@@ -35,7 +34,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         ErrorMvcAutoConfiguration.class,
         JmxAutoConfiguration.class,
         SpringApplicationAdminJmxAutoConfiguration.class,
-        SecurityAutoConfiguration.class
+        //SecurityAutoConfiguration.class
 })
 @EnableJpaRepositories(basePackages = "by.gstu.edu.repository")
 @EntityScan(basePackages = "by.gstu.edu.model")
