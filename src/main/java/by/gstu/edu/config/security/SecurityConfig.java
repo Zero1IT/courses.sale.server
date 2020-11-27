@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
  * @author Alexander Petrushkin
  */
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider tokenProvider;

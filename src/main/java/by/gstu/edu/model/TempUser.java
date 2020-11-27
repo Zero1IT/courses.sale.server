@@ -18,6 +18,7 @@ public class TempUser {
     private String email;
     private String login;
     private String password;
+    private boolean isGenerated = true;
     private VerificationCode verificationCode;
 
     @Id
@@ -52,6 +53,14 @@ public class TempUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isGenerated() {
+        return isGenerated;
+    }
+
+    public void setGenerated(boolean generated) {
+        isGenerated = generated;
     }
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
