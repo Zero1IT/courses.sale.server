@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfigu
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.websocket.servlet.WebSocketServletAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
@@ -38,6 +39,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 })
 @EnableJpaRepositories(basePackages = "by.gstu.edu.repository")
 @EntityScan(basePackages = "by.gstu.edu.model")
+@PropertySource("classpath:credentials.secure.properties")
 public class SpringBoot {
     public static void main(String[] args) {
         final ConfigurableApplicationContext context = SpringApplication.run(SpringBoot.class, args);
