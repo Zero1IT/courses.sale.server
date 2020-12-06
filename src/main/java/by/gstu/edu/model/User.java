@@ -12,7 +12,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User {
     private String id;
     private Role role = Role.DEFAULT;
@@ -21,7 +21,7 @@ public class User {
     private String password;
     private String name;
     private String lastname;
-    private boolean isConfirmed = false;
+    private boolean isConfirmed;
 
     @Id
     @GeneratedValue(generator = "system-uuid")
