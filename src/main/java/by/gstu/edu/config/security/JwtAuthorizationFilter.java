@@ -31,17 +31,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {
-            String token = tokenProvider.resolveToken(request);
+            final String token = tokenProvider.resolveToken(request);
             if (token != null && tokenProvider.validateToken(token)) {
                 Authentication authentication = tokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+            chain.doFilter(request, response);
         } catch (JwtAuthenticationException e) {
             SecurityContextHolder.clearContext();
             response.sendError(e.getStatus().value(), e.getMessage());
-            throw e;
         }
-
-        chain.doFilter(request, response);
     }
 }

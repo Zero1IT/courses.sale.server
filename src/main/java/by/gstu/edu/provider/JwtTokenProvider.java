@@ -119,7 +119,7 @@ public class JwtTokenProvider {
         } catch (MalformedJwtException e) {
             throw new JwtAuthenticationException("Invalid token", HttpStatus.FORBIDDEN);
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("Invalid token", HttpStatus.UNAUTHORIZED);
+            throw new JwtAuthenticationException("Invalid token", HttpStatus.FORBIDDEN);
         }
     }
 
