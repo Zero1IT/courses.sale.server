@@ -9,6 +9,11 @@
       "name": "host.link",
       "type": "java.lang.String",
       "description": "Full root link."
+    },
+    {
+      "name": "spring.jpa.show-details-sql",
+      "type": "java.lang.Boolean",
+      "description": "Description for spring.jpa.show-details-sql."
     }
   ]
 }
