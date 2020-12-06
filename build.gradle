@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.4.0'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'org.asciidoctor.convert' version '1.5.6'
 }
 
 group 'by.gstu'
@@ -38,14 +39,15 @@ dependencies {
     implementation 'org.jetbrains:annotations:20.1.0'
     implementation 'org.mapstruct:mapstruct:1.4.1.Final'
 
-    // TEST
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-
     // LOGGER FOR DB
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+
+    // TEST
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
 
     // process annotations
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.1.Final'
@@ -53,4 +55,9 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+asciidoctor {
+    sourceDir 'docs/asciidoc'
+    attributes 'snippets': file('build/snippets')
 }

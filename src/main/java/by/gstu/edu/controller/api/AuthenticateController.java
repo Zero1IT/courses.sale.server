@@ -18,7 +18,6 @@ import java.util.UUID;
  *
  * @author Alexander Petrushkin
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticateController {

@@ -1,0 +1,9 @@
+= Getting started with REST api
+
+This is an example output for a service running at http://localhost:8080:
+
+.request
+include::{snippets}/auth/http-request.adoc[]
+
+.response
+include::{snippets}/auth/http-response.adoc[]
