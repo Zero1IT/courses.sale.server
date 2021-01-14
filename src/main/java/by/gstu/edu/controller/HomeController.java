@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
  * createdAt: 11/22/2020
  * project: SaleCoursesServer
  *
+ *  For from-root path
+ *
  * @author Alexander Petrushkin
  */
 @Controller

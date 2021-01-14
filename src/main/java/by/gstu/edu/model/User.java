@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User {
-    private String id;
+    private Long id;
     private Role role = Role.DEFAULT;
     private String login;
     private String email;
@@ -24,13 +24,12 @@ public class User {
     private boolean isConfirmed;
 
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    public String getId() {
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -52,6 +51,7 @@ public class User {
         this.email = email;
     }
 
+    @Column(nullable = false)
     public boolean isConfirmed() {
         return isConfirmed;
     }

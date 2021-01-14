@@ -1,8 +1,5 @@
 package by.gstu.edu.model;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 
 /**
@@ -18,8 +15,6 @@ public class TempUser {
     private String email;
     private String login;
     private String password;
-    private boolean isGenerated = true;
-    private VerificationCode verificationCode;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,24 +48,5 @@ public class TempUser {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public boolean isGenerated() {
-        return isGenerated;
-    }
-
-    public void setGenerated(boolean generated) {
-        isGenerated = generated;
-    }
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @PrimaryKeyJoinColumn
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    public VerificationCode getVerificationCode() {
-        return verificationCode;
-    }
-
-    public void setVerificationCode(VerificationCode verificationCode) {
-        this.verificationCode = verificationCode;
     }
 }

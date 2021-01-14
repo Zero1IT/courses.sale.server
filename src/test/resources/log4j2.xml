@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration strict="true">
+    <Appenders>
+        <Console name="root">
+            <Layout type="PatternLayout"
+                    pattern="Root log: %d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="log4jdbc.log4j2" level="info" additivity="false">
+            <MarkerFilter marker="LOG4JDBC_OTHER" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <AppenderRef ref="root" />
+        </Logger>
+        <Root level="warn">
+            <AppenderRef ref="root" />
+        </Root>
+    </Loggers>
+</Configuration>

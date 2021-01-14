@@ -2,6 +2,7 @@ package by.gstu.edu.controller.api;
 
 import by.gstu.edu.dto.AuthenticationDto;
 import by.gstu.edu.exception.JwtAuthenticationException;
+import by.gstu.edu.model.User;
 import by.gstu.edu.provider.JwtTokenProvider;
 import by.gstu.edu.service.AuthenticateService;
 import by.gstu.edu.service.EmailService;
@@ -28,6 +29,8 @@ public class AuthenticateController {
 
     @Value("${host.link}")
     private String domain;
+    @Value("${const.verify_link_format}")
+    private String verifyLinkFormat;
 
     public AuthenticateController(EmailService emailService, AuthenticateService authenticateService, JwtTokenProvider jwtTokenProvider) {
         this.emailService = emailService;
@@ -38,9 +41,7 @@ public class AuthenticateController {
     @PostMapping("auto")
     @ResponseStatus(HttpStatus.CREATED)
     public void autoRegistration(@RequestParam String email) {
-        String code = UUID.randomUUID().toString();
-        String link = String.format("%s/verify/%s", domain, code);
-        emailService.sendActivationLink(email, link, authenticateService.generateTempUser(email, code));
+        emailService.sendActivationLink(email, null, authenticateService.generateTempUser(email));
     }
 
     @PostMapping("refresh")
@@ -55,6 +56,14 @@ public class AuthenticateController {
     @PostMapping("registration")
     @ResponseStatus(HttpStatus.CREATED)
     public void registration(@RequestBody AuthenticationDto dto) {
-        // TODO: full registration
+        String code = UUID.randomUUID().toString();
+        String link = String.format(verifyLinkFormat, domain, code);
+        User user = new User();
+        user.setName(dto.getName());
+        user.setLastname(dto.getLastname());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        emailService.sendActivationLink(user.getEmail(), link, null);
+        authenticateService.registrationUser(user, code);
     }
 }

@@ -57,8 +57,8 @@
         <p th:text="#{page.activation.greeting}"></p>
     </div>
     <div class="activation">
-        <div class="credentials" th:if="${user != null}">
-            <p><span th:text="#{page.activation.password}"></span>: <span th:text="${user.getPassword()}"></span></p>
+        <div class="credentials" th:if="${tempUser != null}">
+            <p><span th:text="#{page.activation.password}"></span>: <span th:text="${tempUser.getPassword()}"></span></p>
         </div>
         <a th:if="${link != null}" th:href="${link}">
             <p class="a-link info" th:text="#{page.activation.link}"></p>

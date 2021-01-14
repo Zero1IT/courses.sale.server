@@ -116,8 +116,6 @@ public class JwtTokenProvider {
             return true;
         } catch (ExpiredJwtException e) {
             throw new JwtAuthenticationException("Token is expired. Refresh it", HttpStatus.UNAUTHORIZED);
-        } catch (MalformedJwtException e) {
-            throw new JwtAuthenticationException("Invalid token", HttpStatus.FORBIDDEN);
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtAuthenticationException("Invalid token", HttpStatus.FORBIDDEN);
         }

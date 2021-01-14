@@ -2,6 +2,7 @@ package by.gstu.edu.service.impl;
 
 import by.gstu.edu.exception.EmailSendException;
 import by.gstu.edu.model.TempUser;
+import by.gstu.edu.model.User;
 import by.gstu.edu.service.EmailService;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -30,11 +32,11 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendActivationLink(String email, String link, TempUser user) {
+    public void sendActivationLink(String email, String link, TempUser tempUser) {
         try {
             Context context = new Context();
             context.setVariable("link", link);
-            context.setVariable("user", user);
+            context.setVariable("tempUser", tempUser);
             String text = templateEngine.process("activation_email", context);
             MimeMessage mimeMessage = mimeMessage(email, "Email activation", text);
             javaMail.send(mimeMessage);

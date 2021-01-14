@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class VerificationCode {
     private Long id;
     private String code;
-    private TempUser tempUser;
+    private User user;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,13 +34,13 @@ public class VerificationCode {
         this.code = code;
     }
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    public TempUser getTempUser() {
-        return tempUser;
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id")
+    public User getUser() {
+        return user;
     }
 
-    public void setTempUser(TempUser tempUser) {
-        this.tempUser = tempUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

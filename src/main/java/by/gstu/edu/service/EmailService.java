@@ -9,5 +9,6 @@ import by.gstu.edu.model.TempUser;
  * @author Alexander Petrushkin
  */
 public interface EmailService {
-    void sendActivationLink(String email, String link, TempUser user);
+    // TODO: can throw auth error
+    void sendActivationLink(String email, String link, TempUser tempUser);
 }

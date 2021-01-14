@@ -1,23 +1,18 @@
 package by.gstu.edu.controller.api;
 
-import by.gstu.edu.provider.JwtTokenProvider;
-import by.gstu.edu.repository.UserRepository;
-import by.gstu.edu.service.impl.UserDetailsServiceImpl;
+import by.gstu.edu.TestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -26,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @author Alexander Petrushkin
  */
-@SpringBootTest
+@SpringBootTest(classes = TestConfiguration.class)
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs(outputDir = "build/snippets")
 class AuthenticateControllerTest {

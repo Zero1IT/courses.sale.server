@@ -7,6 +7,8 @@ package by.gstu.edu.dto;
  * @author Alexander Petrushkin
  */
 public class AuthenticationDto {
+    private String name;
+    private String lastname;
     private String email;
     private String password;
 
@@ -24,5 +26,21 @@ public class AuthenticationDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 }
