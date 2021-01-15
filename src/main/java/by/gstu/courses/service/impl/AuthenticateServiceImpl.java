@@ -2,10 +2,11 @@ package by.gstu.courses.service.impl;
 
 import by.gstu.courses.exception.UserExistsException;
 import by.gstu.courses.exception.VerificationException;
-import by.gstu.courses.model.Role;
+import by.gstu.courses.model.PermanentRoles;
 import by.gstu.courses.model.TempUser;
 import by.gstu.courses.model.User;
 import by.gstu.courses.model.VerificationCode;
+import by.gstu.courses.repository.RoleRepository;
 import by.gstu.courses.repository.TempUserRepository;
 import by.gstu.courses.repository.UserRepository;
 import by.gstu.courses.repository.VerificationRepository;
@@ -29,17 +30,19 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     private final RandomService randomService;
     private final PasswordEncoder passwordEncoder;
     private final TempUserRepository tempUserRepository;
+    private final RoleRepository roleRepository;
 
     public AuthenticateServiceImpl(UserRepository userRepository,
                                    VerificationRepository verificationRepository,
                                    RandomService randomService,
                                    PasswordEncoder passwordEncoder,
-                                   TempUserRepository tempUserRepository) {
+                                   TempUserRepository tempUserRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.verificationRepository = verificationRepository;
         this.randomService = randomService;
         this.passwordEncoder = passwordEncoder;
         this.tempUserRepository = tempUserRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -71,7 +74,8 @@ public class AuthenticateServiceImpl implements AuthenticateService {
             throw new UserExistsException("User with current email already exists");
         }
 
-        user.setRole(Role.DEFAULT);
+        roleRepository.findById(PermanentRoles.DEFAULT.name())
+                .ifPresent(user::setRole);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmed(false);
 
@@ -89,11 +93,18 @@ public class AuthenticateServiceImpl implements AuthenticateService {
         final User user = vCode.getUser();
 
         if (user != null) {
-            user.setConfirmed(true);
+            confirmedUser(user);
             userRepository.save(user);
         }
 
         verificationRepository.delete(vCode);
+    }
+
+    private void confirmedUser(User user) {
+        roleRepository
+                .findById(PermanentRoles.USER.name())
+                .ifPresent(user::setRole);
+        user.setConfirmed(true);
     }
 
     private User createUserFromTempUser(TempUser tempUser) {
@@ -101,7 +112,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
         user.setEmail(tempUser.getEmail());
         user.setLogin(tempUser.getLogin());
         user.setPassword(passwordEncoder.encode(tempUser.getPassword()));
-        user.setConfirmed(true);
+        confirmedUser(user);
         return user;
     }
 }

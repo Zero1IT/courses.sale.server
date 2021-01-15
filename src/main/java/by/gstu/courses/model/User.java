@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User {
     private Long id;
-    private Role role = Role.DEFAULT;
+    private Role role;
     private String login;
     private String email;
     private String password;
@@ -31,7 +31,8 @@ public class User {
         this.id = id;
     }
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "name", nullable = false)
     public Role getRole() {
         return role;
     }

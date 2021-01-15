@@ -137,7 +137,7 @@ public class JwtTokenProvider {
     private String createToken(User user, Key key, long expiration) {
         Date now = new Date();
         return Jwts.builder()
-                .claim("role", user.getRole().name())
+                .claim("role", user.getRole().getName())
                 .claim("email", user.getEmail())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expiration * 1000))

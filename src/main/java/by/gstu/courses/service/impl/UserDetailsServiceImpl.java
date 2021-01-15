@@ -3,10 +3,13 @@ package by.gstu.courses.service.impl;
 import by.gstu.courses.model.User;
 import by.gstu.courses.repository.UserRepository;
 import by.gstu.courses.service.AuthenticateService;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 /**
  * createdAt: 11/24/2020
@@ -27,8 +30,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException { // NOSONAR
-        User user = userRepository.findByEmail(email)
+        final User user = userRepository.findByEmail(email)
                 .orElseGet(() -> authenticateService.transferTempUser(email));
+
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
@@ -37,6 +41,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 true,
                 true,
                 user.getRole().getPermissions()
+                        .stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toSet())
         );
     }
 }
