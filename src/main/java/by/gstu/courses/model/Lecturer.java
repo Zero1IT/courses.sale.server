@@ -13,9 +13,9 @@ import java.util.Set;
  */
 @Entity
 public class Lecturer extends User {
-    private boolean canPublish;
+    private boolean canPublish = true;
 
-    private Set<Course> courses;
+    private Set<Course> ownCourses;
 
     public boolean isCanPublish() {
         return canPublish;
@@ -26,11 +26,11 @@ public class Lecturer extends User {
     }
 
     @OneToMany(mappedBy = "lecturer", fetch = FetchType.LAZY)
-    public Set<Course> getCourses() {
-        return courses;
+    public Set<Course> getOwnCourses() {
+        return ownCourses;
     }
 
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
+    public void setOwnCourses(Set<Course> courses) {
+        this.ownCourses = courses;
     }
 }

@@ -25,6 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs(outputDir = "build/snippets")
 class AuthenticateControllerTest {
 
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String email = "use-temp-service-email-for-generate@temp.temp";
+
     @Autowired
     private MockMvc mvc;
 
@@ -33,7 +36,7 @@ class AuthenticateControllerTest {
         mvc.perform(post("/api/auth/auto")
                 .secure(true)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .content("email=pet.home.project.test@gmail.com"))
+                .content("email="+email)) // !!!!!
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andDo(document("auth"));

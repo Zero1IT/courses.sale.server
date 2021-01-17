@@ -1,6 +1,8 @@
 package by.gstu.courses.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * createdAt: 11/22/2020
@@ -9,7 +11,7 @@ import javax.persistence.*;
  * @author Alexander Petrushkin
  */
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = {@Index(columnList = "email", name = "user_email")})
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User {
     private Long id;
@@ -20,6 +22,8 @@ public class User {
     private String name;
     private String lastname;
     private boolean isConfirmed;
+
+    private Set<Course> courses = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -90,5 +94,14 @@ public class User {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    @ManyToMany(mappedBy = "users")
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 }
