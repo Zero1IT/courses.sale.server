@@ -46,23 +46,28 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     }
 
     @Override
-    public TempUser generateTempUser(String email) {
+    public TempUser generateTempUser(String email, String code) {
         if (userRepository.existsAnywhereByEmail(email)) {
             throw new UserExistsException("User with current email already exists");
         }
+
         TempUser user = new TempUser();
         user.setEmail(email);
         user.setLogin(randomService.randomLogin());
-        user.setPassword(randomService.randomPasswordUseAll(12));
-        tempUserRepository.save(user);
+        user.setActivationUUID(code);
 
+        String password = randomService.randomPasswordUseAll(12);
+        user.setPassword(passwordEncoder.encode(password));
+        user = tempUserRepository.save(user);
+
+        user.setPassword(password); // use raw password for send to email
         return user;
     }
 
     @Override
-    public User transferTempUser(String email) {
-        final TempUser tempUser = tempUserRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(email));
+    public User transferTempUser(String code) {
+        final TempUser tempUser = tempUserRepository.findByActivationUUID(code)
+                .orElseThrow(() -> new UsernameNotFoundException(""));
         final User user = userRepository.save(createUserFromTempUser(tempUser));
         tempUserRepository.delete(tempUser);
         return user;
@@ -111,7 +116,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
         User user = new User();
         user.setEmail(tempUser.getEmail());
         user.setLogin(tempUser.getLogin());
-        user.setPassword(passwordEncoder.encode(tempUser.getPassword()));
+        user.setPassword(tempUser.getPassword());
         confirmedUser(user);
         return user;
     }

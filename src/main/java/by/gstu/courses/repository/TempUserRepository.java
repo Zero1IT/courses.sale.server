@@ -12,5 +12,5 @@ import java.util.Optional;
  * @author Alexander Petrushkin
  */
 public interface TempUserRepository extends CrudRepository<TempUser, Long> {
-    Optional<TempUser> findByEmail(String email);
+    Optional<TempUser> findByActivationUUID(String activationUUID);
 }

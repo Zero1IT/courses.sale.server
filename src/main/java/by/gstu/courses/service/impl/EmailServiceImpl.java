@@ -36,7 +36,7 @@ public class EmailServiceImpl implements EmailService {
             context.setVariable("link", link);
             context.setVariable("tempUser", tempUser);
             String text = templateEngine.process("activation_email", context);
-            MimeMessage mimeMessage = mimeMessage(email, "Email activation", text);
+            MimeMessage mimeMessage = mimeMessage(email, tempUser == null ? "Email verification" : "Account activation", text);
             javaMail.send(mimeMessage);
         } catch (MessagingException e) {
             throw new EmailSendException(e);

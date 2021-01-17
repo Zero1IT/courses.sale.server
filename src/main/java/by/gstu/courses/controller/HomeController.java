@@ -27,4 +27,10 @@ public class HomeController {
         authenticateService.confirmVerification(code);
         return "verify-page";
     }
+
+    @GetMapping("/activate/{code}")
+    public String activateTempUserAccountVerification(@PathVariable String code) {
+        authenticateService.transferTempUser(code);
+        return "verify-page";
+    }
 }

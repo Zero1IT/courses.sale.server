@@ -21,17 +21,15 @@ import java.util.stream.Collectors;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final AuthenticateService authenticateService;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, AuthenticateService authenticateService) {
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.authenticateService = authenticateService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException { // NOSONAR
         final User user = userRepository.findByEmail(email)
-                .orElseGet(() -> authenticateService.transferTempUser(email));
+                .orElseThrow(() -> new UsernameNotFoundException(email));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),

@@ -27,10 +27,12 @@ public class AuthenticateController {
     private final AuthenticateService authenticateService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Value("${host.link}")
+    @Value("${host.domain}")
     private String domain;
     @Value("${const.verify_link_format}")
     private String verifyLinkFormat;
+    @Value("${const.activate_link_format}")
+    private String activateLinkFormat;
 
     public AuthenticateController(EmailService emailService, AuthenticateService authenticateService, JwtTokenProvider jwtTokenProvider) {
         this.emailService = emailService;
@@ -41,7 +43,9 @@ public class AuthenticateController {
     @PostMapping("auto")
     @ResponseStatus(HttpStatus.CREATED)
     public void autoRegistration(@RequestParam String email) {
-        emailService.sendActivationLink(email, null, authenticateService.generateTempUser(email));
+        final String code = UUID.randomUUID().toString();
+        final String link = String.format(activateLinkFormat, domain, code);
+        emailService.sendActivationLink(email, link, authenticateService.generateTempUser(email, code));
     }
 
     @PostMapping("refresh")
@@ -56,8 +60,8 @@ public class AuthenticateController {
     @PostMapping("registration")
     @ResponseStatus(HttpStatus.CREATED)
     public void registration(@RequestBody AuthenticationDto dto) {
-        String code = UUID.randomUUID().toString();
-        String link = String.format(verifyLinkFormat, domain, code);
+        final String code = UUID.randomUUID().toString();
+        final String link = String.format(verifyLinkFormat, domain, code);
         User user = new User();
         user.setName(dto.getName());
         user.setLastname(dto.getLastname());
