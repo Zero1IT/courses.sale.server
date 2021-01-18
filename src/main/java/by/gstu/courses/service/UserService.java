@@ -10,5 +10,4 @@ import by.gstu.courses.model.Lecturer;
  */
 public interface UserService {
     Lecturer giveLecturerPermissions(String userEmail);
-
 }

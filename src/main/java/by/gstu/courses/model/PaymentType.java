@@ -43,5 +43,9 @@ public enum PaymentType {
 
     public interface PaymentProcessor {
         boolean paymentSuccess(User user, Object ... paymentData);
+
+        default String errorInfo() {
+            return "No error info";
+        }
     }
 }
