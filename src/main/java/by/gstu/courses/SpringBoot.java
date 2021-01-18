@@ -10,11 +10,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.boot.autoconfigure.task.TaskSchedulingAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.websocket.servlet.WebSocketServletAutoConfiguration;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -41,7 +43,7 @@ import javax.sql.DataSource;
         ErrorMvcAutoConfiguration.class,
         JmxAutoConfiguration.class,
         SpringApplicationAdminJmxAutoConfiguration.class,
-        //SecurityAutoConfiguration.class
+        SecurityAutoConfiguration.class
 })
 @EnableJpaRepositories(basePackages = "by.gstu.courses.repository")
 @EntityScan(basePackages = "by.gstu.courses.model")
@@ -51,7 +53,8 @@ public class SpringBoot {
     public static void main(String[] args) {
         System.setProperty("log4jdbc.drivers", "com.mysql.cj.jdbc.Driver");
         System.setProperty("log4jdbc.auto.load.popular.drivers", "false");
-        SpringApplication.run(SpringBoot.class, args);
+        ApplicationContext context = SpringApplication.run(SpringBoot.class, args);
+        System.out.println(context.getBeanDefinitionCount());
     }
 
     @Bean

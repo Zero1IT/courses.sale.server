@@ -37,7 +37,7 @@ public class RoleStartInitializer implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         final Set<Role> roles = populators.entrySet().stream()
                 .map(e -> {
                     final Role role = new Role();
