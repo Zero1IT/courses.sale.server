@@ -38,6 +38,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException { // NOSONAR
         try {
+            System.out.println("\n\nDOWN_TOWN\n\n");
             final AuthenticationDto credentials = mapper.readValue(request.getInputStream(), AuthenticationDto.class);
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     credentials.getEmail(),

@@ -1,2 +1,2 @@
-### Data generated with ```http://generatedata.com/``` script
+### Data generated with ```sqlfaker```
 

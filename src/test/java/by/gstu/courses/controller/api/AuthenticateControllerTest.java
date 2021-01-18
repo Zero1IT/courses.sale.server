@@ -20,13 +20,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @author Alexander Petrushkin
  */
-@SpringBootTest(classes = TestConfiguration.class)
+@SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureRestDocs(outputDir = "build/snippets")
+@AutoConfigureRestDocs //outputDir = "target/generated-snippets"
 class AuthenticateControllerTest {
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private final String email = "use-temp-service-email-for-generate@temp.temp";
+    private static final String EMAIL = "pocoge7908@pashter.com"; // used temp-mail
 
     @Autowired
     private MockMvc mvc;
@@ -36,7 +35,7 @@ class AuthenticateControllerTest {
         mvc.perform(post("/api/auth/auto")
                 .secure(true)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .content("email="+email)) // !!!!!
+                .content("email="+ EMAIL))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andDo(document("auth"));
