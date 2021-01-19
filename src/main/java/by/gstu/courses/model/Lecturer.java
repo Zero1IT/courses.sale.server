@@ -13,6 +13,7 @@ import java.util.Set;
  */
 @Entity
 public class Lecturer extends User {
+
     private boolean canPublish = true;
 
     private Set<Course> ownCourses;

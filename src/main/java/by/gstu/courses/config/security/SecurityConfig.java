@@ -3,6 +3,7 @@ package by.gstu.courses.config.security;
 import by.gstu.courses.provider.JwtTokenProvider;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider tokenProvider;
@@ -27,18 +29,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                    .requiresChannel()
-                    .anyRequest()
-                    .requiresSecure()
-                .and()
-                    .cors().and().csrf().disable()
-                    .authorizeRequests()
-                    .antMatchers(HttpMethod.POST, "/api/auth/registration", "/api/auth/auto").permitAll()
-                    .antMatchers(HttpMethod.GET, "/verify/*", "/activate/*").permitAll()
-                    .anyRequest().authenticated()
-                .and()
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager(), tokenProvider))
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager(), tokenProvider))
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .requiresChannel()
+            .anyRequest()
+            .requiresSecure()
+        .and()
+            .cors().and().csrf().disable()
+            .authorizeRequests()
+            .antMatchers(HttpMethod.POST, "/api/auth/registration", "/api/auth/auto").permitAll()
+            .antMatchers(HttpMethod.GET, "/verify/*", "/activate/*").permitAll()
+            .anyRequest().authenticated()
+        .and()
+            .addFilter(new JwtAuthenticationFilter(authenticationManager(), tokenProvider))
+            .addFilter(new JwtAuthorizationFilter(authenticationManager(), tokenProvider))
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 }

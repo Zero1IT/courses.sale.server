@@ -10,5 +10,11 @@ public enum PermanentRoles {
     /**
      *  Database should contains this names as id for `roles`
      */
-    ADMIN, LECTURER, USER, DEFAULT
+    ADMIN, LECTURER, USER, DEFAULT;
+
+    public Role entity() {
+        Role role = new Role();
+        role.setName(name());
+        return role;
+    }
 }

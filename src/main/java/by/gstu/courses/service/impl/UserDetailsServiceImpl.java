@@ -1,5 +1,6 @@
 package by.gstu.courses.service.impl;
 
+import by.gstu.courses.model.Permissions;
 import by.gstu.courses.model.User;
 import by.gstu.courses.repository.UserRepository;
 import by.gstu.courses.service.AuthenticateService;
@@ -39,9 +40,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 true,
                 true,
                 user.getRole().getPermissions()
-                        .stream()
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toSet())
         );
     }
 }

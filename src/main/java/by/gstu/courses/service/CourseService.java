@@ -12,4 +12,5 @@ import java.util.List;
  */
 public interface CourseService {
     List<Course> getNewCourse(int limit, int page);
+    Course createCourse(Course course, String email);
 }

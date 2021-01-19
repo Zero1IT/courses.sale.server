@@ -25,13 +25,13 @@ class MyFaker(Faker):
     def hibernate_dtype(self):
         dt = "USER"
         if self.db.tables["users"].columns["role_id"].data[self.dtype_iter] == "LECTURER":
-            dt = "LECTURER"
+            dt = "Lecturer"
         self.dtype_iter += 1
         return dt
         
     def can_publish_lecturer(self):
         can = False
-        if self.db.tables["users"].columns["dtype"].data[self.can_publish_iteration] == "LECTURER":
+        if self.db.tables["users"].columns["dtype"].data[self.can_publish_iteration] == "Lecturer":
             can = self.boolean()
         self.can_publish_iteration += 1
         return 1 if can else 0
@@ -45,7 +45,7 @@ class MyFaker(Faker):
     def save_lecturer_state(self):
         filtered = enumerate(self.db.tables["users"].columns["dtype"].data)
         filtered = filter(
-            lambda c: c[1] == "LECTURER" and self.db.tables["users"].columns["can_publish"].data[c[0]], filtered
+            lambda c: c[1] == "Lecturer" and self.db.tables["users"].columns["can_publish"].data[c[0]], filtered
         )
         self.lecture_state = list(map(
             lambda c: self.db.tables["users"].columns["id"].data[c[0]], filtered
