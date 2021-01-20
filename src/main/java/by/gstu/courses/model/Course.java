@@ -18,7 +18,7 @@ public class Course {
     private String title;
     private String description;
     private Instant startDate;
-    private short deferredPaymentDays;
+    private Short deferredPaymentDays;
     private boolean isClosed; // closed for invite
     private boolean isEnded;
     private Lecturer lecturer;
@@ -102,11 +102,11 @@ public class Course {
     }
 
     @Column(nullable = false)
-    public short getDeferredPaymentDays() {
+    public Short getDeferredPaymentDays() {
         return deferredPaymentDays;
     }
 
-    public void setDeferredPaymentDays(short deferredPaymentDays) {
+    public void setDeferredPaymentDays(Short deferredPaymentDays) {
         this.deferredPaymentDays = deferredPaymentDays;
     }
 

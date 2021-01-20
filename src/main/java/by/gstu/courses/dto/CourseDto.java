@@ -3,10 +3,7 @@ package by.gstu.courses.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.*;
 import java.time.Instant;
 
 /**
@@ -16,6 +13,8 @@ import java.time.Instant;
  * @author Alexander Petrushkin
  */
 public class CourseDto {
+    @PositiveOrZero
+    private Long id;
     @NotBlank
     private String title;
     @NotBlank
@@ -24,12 +23,20 @@ public class CourseDto {
     @NotNull
     private Instant startDate;
     @PositiveOrZero
-    private short deferredPaymentDays;
+    private Short deferredPaymentDays;
 
     // ignored for deserialization
     private boolean isClosed;
     private boolean isEnded;
     private Long lecturerId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -55,11 +62,11 @@ public class CourseDto {
         this.startDate = startDate;
     }
 
-    public short getDeferredPaymentDays() {
+    public Short getDeferredPaymentDays() {
         return deferredPaymentDays;
     }
 
-    public void setDeferredPaymentDays(short deferredPaymentDays) {
+    public void setDeferredPaymentDays(Short deferredPaymentDays) {
         this.deferredPaymentDays = deferredPaymentDays;
     }
 

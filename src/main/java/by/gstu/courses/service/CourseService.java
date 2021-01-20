@@ -12,5 +12,10 @@ import java.util.List;
  */
 public interface CourseService {
     List<Course> getNewCourse(int limit, int page);
+    Course createCourse(Course course, long userId);
     Course createCourse(Course course, String email);
+    Course updateCourse(Course course, long userId);
+    Course updateCourse(Course course, String email);
+    void deleteCourse(long id, long userId);
+    void deleteCourse(long id, String email);
 }

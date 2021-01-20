@@ -16,6 +16,14 @@ public class DataValidationException extends RuntimeException {
         this("", bindingResult);
     }
 
+    /**
+     * Field name (if exists) in the message, must be wrapped in square brackets
+     * @param message - error message, will be represent in error object with key __error
+     */
+    public DataValidationException(String message) {
+        this(message, null);
+    }
+
     public DataValidationException(String message, BindingResult bindingResult) {
         this(message, null, bindingResult);
     }
