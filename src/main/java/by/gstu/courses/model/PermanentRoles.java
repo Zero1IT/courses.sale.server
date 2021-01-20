@@ -12,6 +12,10 @@ public enum PermanentRoles {
      */
     ADMIN, LECTURER, USER, DEFAULT;
 
+    public String getWithPrefix() {
+        return "ROLE_" + name();
+    }
+
     public Role entity() {
         Role role = new Role();
         role.setName(name());

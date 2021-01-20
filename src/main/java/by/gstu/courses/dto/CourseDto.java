@@ -23,7 +23,11 @@ public class CourseDto {
     @NotNull
     private Instant startDate;
     @PositiveOrZero
+    @NotNull
     private Short deferredPaymentDays;
+    @Positive
+    @NotNull
+    private Short places;
 
     // ignored for deserialization
     private boolean isClosed;
@@ -68,6 +72,14 @@ public class CourseDto {
 
     public void setDeferredPaymentDays(Short deferredPaymentDays) {
         this.deferredPaymentDays = deferredPaymentDays;
+    }
+
+    public Short getPlaces() {
+        return places;
+    }
+
+    public void setPlaces(Short places) {
+        this.places = places;
     }
 
     @JsonProperty

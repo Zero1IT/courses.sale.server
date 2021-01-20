@@ -41,7 +41,7 @@ public class CourseController {
             limit = 20;
         }
 
-        return courseService.getNewCourse(page, limit).stream()
+        return courseService.getList(page, limit).stream()
                 .map(it -> modelMapper.map(it, CourseDto.class))
                 .collect(Collectors.toList());
     }

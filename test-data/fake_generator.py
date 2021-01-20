@@ -23,7 +23,7 @@ class MyFaker(Faker):
         return random.choice(self.roles)
 
     def hibernate_dtype(self):
-        dt = "USER"
+        dt = "User"
         if self.db.tables["users"].columns["role_id"].data[self.dtype_iter] == "LECTURER":
             dt = "Lecturer"
         self.dtype_iter += 1
