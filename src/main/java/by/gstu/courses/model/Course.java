@@ -18,6 +18,7 @@ public class Course {
     private String title;
     private String description;
     private Instant startDate;
+    private Short places;
     private Short deferredPaymentDays;
     private boolean isClosed; // closed for invite
     private boolean isEnded;
@@ -54,8 +55,8 @@ public class Course {
         this.description = description;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "ownerId", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     public Lecturer getLecturer() {
         return lecturer;
     }
@@ -99,6 +100,15 @@ public class Course {
 
     public void setStartDate(Instant startDate) {
         this.startDate = startDate;
+    }
+
+    @Column(nullable = false)
+    public Short getPlaces() {
+        return places;
+    }
+
+    public void setPlaces(Short places) {
+        this.places = places;
     }
 
     @Column(nullable = false)

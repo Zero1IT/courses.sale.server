@@ -2,8 +2,8 @@
 <Configuration strict="true">
     <Appenders>
         <Console name="root">
-            <Layout type="PatternLayout"
-                    pattern="Root log: %d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+            <Layout type="PatternLayout" disableAnsi="false"
+                    pattern="%highlight{Root log: %d{yyyy-MM-dd HH:mm:ss} %-5p} %c{1}:%L - %m%n" />
         </Console>
     </Appenders>
     <Loggers>

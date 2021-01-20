@@ -11,7 +11,7 @@ import java.util.List;
  * @author Alexander Petrushkin
  */
 public interface CourseService {
-    List<Course> getNewCourse(int limit, int page);
+    List<Course> getNewCourse(int page, int limit);
     Course createCourse(Course course, long userId);
     Course createCourse(Course course, String email);
     Course updateCourse(Course course, long userId);

@@ -33,14 +33,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getNewCourse(int limit, int page) {
+    public List<Course> getNewCourse(int page, int limit) {
         if (limit > 20 || limit < 0) {
             throw new IllegalArgumentException("Limit is too much");
         }
+
         if (limit == 0) {
             return Collections.emptyList();
         }
-        return courseRepository.findAll(PageRequest.of(page, limit, Sort.Direction.DESC)).getContent();
+        return courseRepository.findAll(PageRequest.of(page, limit, Sort.Direction.DESC, "id"))
+                .getContent();
     }
 
     @Override
