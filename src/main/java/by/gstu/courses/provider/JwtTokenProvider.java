@@ -5,6 +5,7 @@ import by.gstu.courses.model.Token;
 import by.gstu.courses.model.User;
 import by.gstu.courses.repository.TokenRepository;
 import by.gstu.courses.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -70,7 +71,7 @@ public class JwtTokenProvider {
 
     public Map<String, String> createAndSaveTokens(String email) {
         return createAndSaveTokens(userRepository.findByEmail(email)
-                .orElseThrow( /* undefined behavior */ ));
+                .orElseThrow( /* TODO: undefined behavior */ ));
     }
 
     public Map<String, String> createAndSaveTokens(User user) {
@@ -80,8 +81,12 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        final UserDetails userDetails = detailsService.loadUserByUsername(getEmail(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        final Claims body = getBody(token);
+        final UserDetails userDetails = detailsService.loadUserByUsername(getEmail(body));
+        final UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        authenticationToken.setDetails(getId(body));
+        return authenticationToken;
     }
 
     public String resolveToken(HttpServletRequest request) {
@@ -126,12 +131,23 @@ public class JwtTokenProvider {
     }
 
     private String getEmail(String token) {
+        return getBody(token).get("email", String.class);
+    }
+
+    private String getEmail(Claims body) {
+        return body.get("email", String.class);
+    }
+
+    private Long getId(Claims body) {
+        return body.get("id", Long.class);
+    }
+
+    private Claims getBody(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .get("email", String.class);
+                .getBody();
     }
 
     private String createToken(User user, Key key, long expiration) {
@@ -139,6 +155,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .claim("role", user.getRole().getName())
                 .claim("email", user.getEmail())
+                .claim("id", user.getId())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expiration * 1000))
                 .signWith(key)
