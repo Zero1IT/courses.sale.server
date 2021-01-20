@@ -36,6 +36,11 @@ public class Role {
         this.permissions = permissions;
     }
 
+    @Transient
+    public String getWithPrefix() {
+        return "ROLE_" + name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

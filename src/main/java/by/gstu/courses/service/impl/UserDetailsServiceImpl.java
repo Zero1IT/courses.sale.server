@@ -3,14 +3,12 @@ package by.gstu.courses.service.impl;
 import by.gstu.courses.model.Permissions;
 import by.gstu.courses.model.User;
 import by.gstu.courses.repository.UserRepository;
-import by.gstu.courses.service.AuthenticateService;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
+import java.util.HashSet;
 
 /**
  * createdAt: 11/24/2020
@@ -32,6 +30,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         final User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(email));
 
+        final HashSet<Permissions.Permission> permissions = new HashSet<>(user.getRole().getPermissions());
+        permissions.add(new Permissions.Permission(user.getRole().getWithPrefix()));
+
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
@@ -39,7 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 true,
                 true,
                 true,
-                user.getRole().getPermissions()
+                permissions
         );
     }
 }
