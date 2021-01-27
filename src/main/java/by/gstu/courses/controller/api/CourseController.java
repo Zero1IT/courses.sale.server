@@ -37,11 +37,8 @@ public class CourseController {
     @GetMapping("{page}")
     public List<CourseDto> getCourses(@PathVariable int page,
                                       @RequestParam(name = "limit", defaultValue = "0") int limit) {
-        if (limit <= 0 || limit > 20) {
-            limit = 20;
-        }
 
-        return courseService.getList(page, limit).stream()
+        return courseService.getList(page, Limits.pageLimit(limit)).stream()
                 .map(it -> modelMapper.map(it, CourseDto.class))
                 .collect(Collectors.toList());
     }

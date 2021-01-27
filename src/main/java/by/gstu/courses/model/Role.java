@@ -15,6 +15,9 @@ import java.util.Set;
 @Table(name = "roles")
 public class Role {
     private String name;
+    private boolean programmatically;
+    private boolean changeable;
+
     private Set<Permissions.Permission> permissions = new HashSet<>();
 
     @Id
@@ -24,6 +27,22 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isProgrammatically() {
+        return programmatically;
+    }
+
+    public void setProgrammatically(boolean programmatically) {
+        this.programmatically = programmatically;
+    }
+
+    public boolean isChangeable() {
+        return changeable;
+    }
+
+    public void setChangeable(boolean changeable) {
+        this.changeable = changeable;
     }
 
     @ElementCollection(fetch = FetchType.EAGER)

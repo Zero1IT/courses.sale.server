@@ -9,12 +9,10 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * createdAt: ${DATE}
@@ -42,21 +40,15 @@ public class RoleStartInitializer implements ApplicationRunner {
     }
 
     private void initializeRoleTable(Map<Role, Consumer<Set<Permissions.Permission>>> populators) {
-        final List<Role> list = StreamSupport.stream(roleRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-        final boolean allMatch = !list.isEmpty() && list.stream().allMatch(populators::containsKey);
+        final Set<Role> roles = populators.entrySet().stream()
+                .map(e -> {
+                    final Role role = e.getKey();
+                    e.getValue().accept(role.getPermissions());
+                    return role;
+                })
+                .collect(Collectors.toSet());
 
-        if (!allMatch) {
-            final Set<Role> roles = populators.entrySet().stream()
-                    .map(e -> {
-                        final Role role = e.getKey();
-                        e.getValue().accept(role.getPermissions());
-                        return role;
-                    })
-                    .collect(Collectors.toSet());
-
-            roleRepository.saveAll(roles);
-        }
+        roleRepository.saveAll(roles);
     }
 
     private void populateAdminPermissions(Set<Permissions.Permission> permissions) {

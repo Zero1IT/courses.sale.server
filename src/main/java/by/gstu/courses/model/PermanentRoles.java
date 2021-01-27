@@ -10,7 +10,17 @@ public enum PermanentRoles {
     /**
      *  Database should contains this names as id for `roles`
      */
-    ADMIN, LECTURER, USER, DEFAULT;
+    ADMIN, LECTURER(false), USER, DEFAULT;
+
+    private final boolean programmatically;
+
+    PermanentRoles(boolean programmatically) {
+        this.programmatically = programmatically;
+    }
+
+    PermanentRoles() {
+        this(true);
+    }
 
     public String getWithPrefix() {
         return "ROLE_" + name();
@@ -19,6 +29,8 @@ public enum PermanentRoles {
     public Role entity() {
         Role role = new Role();
         role.setName(name());
+        role.setProgrammatically(programmatically);
+        role.setChangeable(false);
         return role;
     }
 }

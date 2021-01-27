@@ -1,5 +1,8 @@
 package by.gstu.courses.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 /**
@@ -10,4 +13,5 @@ import java.util.List;
  */
 public interface DefaultService<T> {
     List<T> getList(int page, int limit);
+    Page<T> getPage(Pageable pageable);
 }
