@@ -62,7 +62,7 @@ public class AuthenticateController {
     public void registration(@RequestBody AuthenticationDto dto) {
         final String code = UUID.randomUUID().toString();
         final String link = String.format(verifyLinkFormat, domain, code);
-        User user = new User();
+        final User user = new User();
         user.setName(dto.getName());
         user.setLastname(dto.getLastname());
         user.setEmail(dto.getEmail());

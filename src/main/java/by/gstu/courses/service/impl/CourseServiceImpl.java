@@ -2,14 +2,19 @@ package by.gstu.courses.service.impl;
 
 import by.gstu.courses.exception.NotFoundException;
 import by.gstu.courses.model.Course;
-import by.gstu.courses.model.Lecturer;
+import by.gstu.courses.model.User;
 import by.gstu.courses.repository.CourseRepository;
-import by.gstu.courses.repository.LecturerRepository;
+import by.gstu.courses.repository.UserRepository;
 import by.gstu.courses.service.CourseService;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * createdAt: 1/17/2021
@@ -18,29 +23,28 @@ import javax.transaction.Transactional;
  * @author Alexander Petrushkin
  */
 @Service
-public class CourseServiceImpl extends AbstractDefaultService<Course, Long> implements CourseService {
+public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
-    private final LecturerRepository lecturerRepository;
+    private final UserRepository userRepository;
 
-    public CourseServiceImpl(CourseRepository courseRepository, LecturerRepository lecturerRepository) {
-        super(courseRepository);
+    public CourseServiceImpl(CourseRepository courseRepository, UserRepository userRepository) {
         this.courseRepository = courseRepository;
-        this.lecturerRepository = lecturerRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public Course createCourse(Course course, long userId) {
-        return createCourse(course, lecturerRepository.getOne(userId));
+        return createCourse(course, userRepository.findByIdAndLecturerInfoNotNull(userId).orElseThrow(/*TODO*/));
     }
 
     @Override
     public Course createCourse(Course course, String email) {
-        return createCourse(course, lecturerRepository.getOne(email));
+        return createCourse(course, userRepository.findByEmailAndLecturerInfoNotNull(email).orElseThrow(/*TODO*/));
     }
 
     @NotNull
-    private Course createCourse(Course course, Lecturer lecturer) {
+    private Course createCourse(Course course, User lecturer) {
         course.setId(null);
         course.setClosed(false);
         course.setEnded(false);
@@ -51,17 +55,17 @@ public class CourseServiceImpl extends AbstractDefaultService<Course, Long> impl
     @Transactional
     @Override
     public Course updateCourse(Course course, long userId) {
-        return updateCourse(course, lecturerRepository.getOne(userId));
+        return updateCourse(course, userRepository.findByIdAndLecturerInfoNotNull(userId).orElseThrow(/*TODO*/));
     }
 
     @Transactional
     @Override
     public Course updateCourse(Course course, String email) {
-        return updateCourse(course, lecturerRepository.getOne(email));
+        return updateCourse(course, userRepository.findByEmailAndLecturerInfoNotNull(email).orElseThrow(/*TODO*/));
     }
 
     @NotNull
-    private Course updateCourse(Course course, Lecturer lecturer) {
+    private Course updateCourse(Course course, User lecturer) {
         final Course updatedCourse = courseRepository
                 .findByIdAndLecturer(course.getId(), lecturer)
                 .orElseThrow(NotFoundException::new);
@@ -81,18 +85,29 @@ public class CourseServiceImpl extends AbstractDefaultService<Course, Long> impl
     @Transactional
     @Override
     public void deleteCourse(long id, long userId) {
-        deleteCourse(id, lecturerRepository.getOne(userId));
+        deleteCourse(id, userRepository.findByIdAndLecturerInfoNotNull(userId).orElseThrow(/*TODO*/));
     }
 
     @Transactional
     @Override
     public void deleteCourse(long id, String email) {
-        deleteCourse(id, lecturerRepository.getOne(email));
+        deleteCourse(id, userRepository.findByEmailAndLecturerInfoNotNull(email).orElseThrow(/*TODO*/));
     }
 
-    private void deleteCourse(long id, Lecturer lecturer) {
+    private void deleteCourse(long id, User lecturer) {
         final Course course = courseRepository.findByIdAndLecturer(id, lecturer)
                 .orElseThrow(NotFoundException::new);
         courseRepository.delete(course);
+    }
+
+    @Override
+    public List<Course> getList(int page, int limit) {
+        return courseRepository.findAll(PageRequest.of(page-1, limit, Sort.Direction.DESC, "id"))
+                .getContent();
+    }
+
+    @Override
+    public Page<Course> getPage(Pageable pageable) {
+        return courseRepository.findAll(pageable);
     }
 }

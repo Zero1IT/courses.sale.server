@@ -1,6 +1,5 @@
 package by.gstu.courses.controller.api;
 
-import by.gstu.courses.dto.LecturerDto;
 import by.gstu.courses.dto.UserDto;
 import by.gstu.courses.dto.UserRoleAssignDto;
 import by.gstu.courses.exception.DataValidationException;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * createdAt: 1/20/2021
@@ -48,49 +46,45 @@ public class UserControlController {
     }
 
     @GetMapping("{page}")
-    public List<? extends UserDto> getUsers(@PathVariable int page,
+    public List<UserDto> getUsers(@PathVariable int page,
                                          @RequestParam(name = "limit", defaultValue = "0") int limit,
                                          @RequestParam(name = "dtype", defaultValue = "all") String type) {
         limit = Limits.pageLimit(limit);
-        Stream<? extends UserDto> stream;
+        List<User> users;
         switch (type.toLowerCase()) {
             case "lecturer":
-                stream = userService.getLecturerList(page, limit).stream()
-                        .map(it -> modelMapper.map(it, LecturerDto.class));
+                users = userService.getLecturerList(page, limit);
                 break;
             case "user":
-                stream = userService.getUsersList(page, limit).stream()
-                        .map(it -> modelMapper.map(it, UserDto.class));
+                users = userService.getUsersList(page, limit);
                 break;
             default:
-                stream = userService.getList(page, limit).stream()
-                        .map(it -> modelMapper.map(it, UserDto.class));
+                users = userService.getList(page, limit);
                 break;
         }
 
-        return stream.collect(Collectors.toList());
+        return users.stream()
+                .map(it -> modelMapper.map(it, UserDto.class))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("select")
-    public Page<? extends UserDto> getUsers(Pageable pageable,
+    public Page<UserDto> getUsers(Pageable pageable,
                                             @RequestParam(name = "email", required = false) String email,
                                             @RequestParam(name = "dtype", defaultValue = "all") String type) {
-        Page<? extends UserDto> page;
+        Page<User> page;
         switch (type.toLowerCase()) {
             case "lecturer":
-                page = userService.getLecturePage(pageable, email)
-                        .map(it -> modelMapper.map(it, LecturerDto.class));
+                page = userService.getLecturePage(pageable, email);
                 break;
             case "user":
-                page = userService.getUsersPage(pageable, email)
-                        .map(it -> modelMapper.map(it, UserDto.class));
+                page = userService.getUsersPage(pageable, email);
                 break;
             default:
-                page = userService.getPageByEmail(pageable, email)
-                        .map(it -> modelMapper.map(it, UserDto.class));
+                page = userService.getPageByEmail(pageable, email);
                 break;
         }
 
-        return page;
+        return page.map(it -> modelMapper.map(it, UserDto.class));
     }
 }

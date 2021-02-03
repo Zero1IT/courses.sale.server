@@ -17,6 +17,7 @@ public class UserDto {
     private String name;
     private String lastname;
     private boolean isConfirmed;
+    private LecturerInfoDto lecturerInfo;
 
     public Long getId() {
         return id;
@@ -72,5 +73,13 @@ public class UserDto {
 
     public void setConfirmed(boolean confirmed) {
         isConfirmed = confirmed;
+    }
+
+    public LecturerInfoDto getLecturerInfo() {
+        return lecturerInfo;
+    }
+
+    public void setLecturerInfo(LecturerInfoDto lecturerInfo) {
+        this.lecturerInfo = lecturerInfo;
     }
 }

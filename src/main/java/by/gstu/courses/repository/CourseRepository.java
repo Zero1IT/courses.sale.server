@@ -1,7 +1,7 @@
 package by.gstu.courses.repository;
 
 import by.gstu.courses.model.Course;
-import by.gstu.courses.model.Lecturer;
+import by.gstu.courses.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -13,5 +13,5 @@ import java.util.Optional;
  * @author Alexander Petrushkin
  */
 public interface CourseRepository extends JpaRepository<Course, Long> {
-    Optional<Course> findByIdAndLecturer(Long id, Lecturer lecturer);
+    Optional<Course> findByIdAndLecturer(Long id, User lecturer);
 }

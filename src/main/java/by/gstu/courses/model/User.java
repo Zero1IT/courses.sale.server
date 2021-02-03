@@ -12,7 +12,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "users", indexes = {@Index(columnList = "email", name = "user_email")})
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User {
     private Long id;
     private Role role;
@@ -23,6 +22,7 @@ public class User {
     private String lastname;
     private boolean isConfirmed;
 
+    private LecturerInfo lecturerInfo;
     private Set<Course> courses = new HashSet<>();
 
     @Id
@@ -94,6 +94,15 @@ public class User {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    @OneToOne(mappedBy = "user")
+    public LecturerInfo getLecturerInfo() {
+        return lecturerInfo;
+    }
+
+    public void setLecturerInfo(LecturerInfo lecturerInfo) {
+        this.lecturerInfo = lecturerInfo;
     }
 
     @ManyToMany(mappedBy = "users")

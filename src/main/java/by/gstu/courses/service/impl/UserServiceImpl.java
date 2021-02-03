@@ -1,13 +1,13 @@
 package by.gstu.courses.service.impl;
 
 import by.gstu.courses.model.*;
-import by.gstu.courses.repository.LecturerRepository;
 import by.gstu.courses.repository.RoleRepository;
 import by.gstu.courses.repository.UserRepository;
 import by.gstu.courses.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,35 +22,30 @@ import java.util.Set;
  * @author Alexander Petrushkin
  */
 @Service
-public class UserServiceImpl extends AbstractDefaultService<User, Long> implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final LecturerRepository lecturerRepository;
-    private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, LecturerRepository lecturerRepository, ModelMapper modelMapper) {
-        super(userRepository);
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.lecturerRepository = lecturerRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
-    public Lecturer giveLecturerPermissions(String userEmail) {
+    public User giveLecturerPermissions(String userEmail) {
         return giveLecturerPermissions(userRepository.findByEmail(userEmail));
     }
 
     @Override
-    public Lecturer giveLecturerPermissions(Long id) {
+    public User giveLecturerPermissions(Long id) {
         return giveLecturerPermissions(userRepository.findById(id));
     }
 
     @Transactional
     @Override
     public User changeRole(Long userId, String newRoleName) {
-        final Optional<Lecturer> optionalLecturer = lecturerRepository.findById(userId);
+        final Optional<User> optionalLecturer = userRepository.findByIdAndLecturerInfoNotNull(userId);
         User user = null;
         Role role = null;
 
@@ -80,12 +75,14 @@ public class UserServiceImpl extends AbstractDefaultService<User, Long> implemen
 
     @Override
     public List<User> getUsersList(int page, int limit) {
-        return getListOfEntities(page, limit, userRepository::findAllUsersOnly);
+        return userRepository.findAllUsersOnly(PageRequest.of(page-1, limit, Sort.Direction.DESC, "id"))
+                .getContent();
     }
 
     @Override
-    public List<Lecturer> getLecturerList(int page, int limit) {
-        return getListOfEntities(page, limit, lecturerRepository::findAll);
+    public List<User> getLecturerList(int page, int limit) {
+        return userRepository.findByLecturerInfoNotNull(PageRequest.of(page-1, limit, Sort.Direction.DESC, "id"))
+                .getContent();
     }
 
     @Override
@@ -95,9 +92,9 @@ public class UserServiceImpl extends AbstractDefaultService<User, Long> implemen
     }
 
     @Override
-    public Page<Lecturer> getLecturePage(Pageable pageable, String email) {
-        return email == null ? lecturerRepository.findAll(pageable) :
-                lecturerRepository.findByEmailContainingIgnoreCase(email, pageable);
+    public Page<User> getLecturePage(Pageable pageable, String email) {
+        return email == null ? userRepository.findByLecturerInfoNotNull(pageable) :
+                userRepository.findByEmailContainingIgnoreCaseAndLecturerInfoNotNull(email, pageable);
     }
 
     @Override
@@ -106,10 +103,24 @@ public class UserServiceImpl extends AbstractDefaultService<User, Long> implemen
                 userRepository.findByEmailContainingIgnoreCase(email, pageable);
     }
 
-    public Lecturer giveLecturerPermissions(Optional<User> userOptional) {
+    public User giveLecturerPermissions(Optional<User> userOptional) {
         return userOptional
-                .map(user -> modelMapper.map(user, Lecturer.class))
-                .map(lecturerRepository::save)
+                .map(user -> {
+                    user.setLecturerInfo(new LecturerInfo());
+                    return user;
+                })
+                .map(userRepository::save)
                 .orElseThrow(/* TODO: */);
+    }
+
+    @Override
+    public List<User> getList(int page, int limit) {
+        return userRepository.findAll(PageRequest.of(page-1, limit, Sort.Direction.DESC, "id"))
+                .getContent();
+    }
+
+    @Override
+    public Page<User> getPage(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }

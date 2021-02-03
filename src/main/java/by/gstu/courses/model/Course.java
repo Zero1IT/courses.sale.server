@@ -22,7 +22,7 @@ public class Course {
     private Short deferredPaymentDays;
     private boolean isClosed; // closed for invite
     private boolean isEnded;
-    private Lecturer lecturer;
+    private User lecturer;
 
     private Set<User> users = new HashSet<>();
     private Set<CourseTopic> topics = new HashSet<>();
@@ -57,11 +57,11 @@ public class Course {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
-    public Lecturer getLecturer() {
+    public User getLecturer() {
         return lecturer;
     }
 
-    public void setLecturer(Lecturer lecturer) {
+    public void setLecturer(User lecturer) {
         this.lecturer = lecturer;
     }
 
