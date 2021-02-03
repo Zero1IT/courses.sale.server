@@ -1,5 +1,7 @@
 package by.gstu.courses.service.impl;
 
+import by.gstu.courses.controller.handler.response.IncompatiblePermissionsException;
+import by.gstu.courses.controller.handler.response.ResourceItemNotFoundException;
 import by.gstu.courses.model.*;
 import by.gstu.courses.repository.RoleRepository;
 import by.gstu.courses.repository.UserRepository;
@@ -50,14 +52,14 @@ public class UserServiceImpl implements UserService {
         Role role = null;
 
         if (optionalLecturer.isPresent()) {
-            role = roleRepository.findById(newRoleName).orElseThrow(/*TODO*/);
+            role = roleRepository.findById(newRoleName).orElseThrow(ResourceItemNotFoundException::new);
             final Set<Permissions.Permission> permissions = role.getPermissions();
             user = optionalLecturer.filter(lec -> permissions.containsAll(lec.getRole().getPermissions()))
-                    .orElseThrow(/*TODO*/);
+                    .orElseThrow(IncompatiblePermissionsException::new);
         }
 
         if (role == null) {
-            role = roleRepository.findById(newRoleName).orElseThrow(/*TODO*/);
+            role = roleRepository.findById(newRoleName).orElseThrow(ResourceItemNotFoundException::new);
         }
 
         if (role.equals(PermanentRoles.LECTURER.entity())) {
@@ -65,7 +67,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (user == null) {
-            user = userRepository.findById(userId).orElseThrow(/*TODO*/);
+            user = userRepository.findById(userId).orElseThrow(ResourceItemNotFoundException::new);
         }
 
         user.setRole(role);
@@ -104,13 +106,12 @@ public class UserServiceImpl implements UserService {
     }
 
     public User giveLecturerPermissions(Optional<User> userOptional) {
-        return userOptional
-                .map(user -> {
+        return userOptional.map(user -> {
                     user.setLecturerInfo(new LecturerInfo());
                     return user;
                 })
                 .map(userRepository::save)
-                .orElseThrow(/* TODO: */);
+                .orElseThrow();
     }
 
     @Override

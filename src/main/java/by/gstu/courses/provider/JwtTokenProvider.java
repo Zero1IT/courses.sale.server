@@ -1,5 +1,6 @@
 package by.gstu.courses.provider;
 
+import by.gstu.courses.controller.handler.response.ResourceItemNotFoundException;
 import by.gstu.courses.exception.JwtAuthenticationException;
 import by.gstu.courses.model.Token;
 import by.gstu.courses.model.User;
@@ -70,8 +71,7 @@ public class JwtTokenProvider {
     }
 
     public Map<String, String> createAndSaveTokens(String email) {
-        return createAndSaveTokens(userRepository.findByEmail(email)
-                .orElseThrow( /* TODO: undefined behavior */ ));
+        return createAndSaveTokens(userRepository.findByEmail(email).orElseThrow(ResourceItemNotFoundException::new));
     }
 
     public Map<String, String> createAndSaveTokens(User user) {

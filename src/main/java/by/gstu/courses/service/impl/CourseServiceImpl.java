@@ -1,5 +1,6 @@
 package by.gstu.courses.service.impl;
 
+import by.gstu.courses.controller.handler.response.ResourceItemNotFoundException;
 import by.gstu.courses.exception.NotFoundException;
 import by.gstu.courses.model.Course;
 import by.gstu.courses.model.User;
@@ -35,12 +36,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course createCourse(Course course, long userId) {
-        return createCourse(course, userRepository.findByIdAndLecturerInfoNotNull(userId).orElseThrow(/*TODO*/));
+        return createCourse(course, getLecturer(userId));
     }
 
     @Override
     public Course createCourse(Course course, String email) {
-        return createCourse(course, userRepository.findByEmailAndLecturerInfoNotNull(email).orElseThrow(/*TODO*/));
+        return createCourse(course, getLecturer(email));
     }
 
     @NotNull
@@ -55,13 +56,13 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     @Override
     public Course updateCourse(Course course, long userId) {
-        return updateCourse(course, userRepository.findByIdAndLecturerInfoNotNull(userId).orElseThrow(/*TODO*/));
+        return updateCourse(course, getLecturer(userId));
     }
 
     @Transactional
     @Override
     public Course updateCourse(Course course, String email) {
-        return updateCourse(course, userRepository.findByEmailAndLecturerInfoNotNull(email).orElseThrow(/*TODO*/));
+        return updateCourse(course, getLecturer(email));
     }
 
     @NotNull
@@ -85,13 +86,21 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     @Override
     public void deleteCourse(long id, long userId) {
-        deleteCourse(id, userRepository.findByIdAndLecturerInfoNotNull(userId).orElseThrow(/*TODO*/));
+        deleteCourse(id, getLecturer(userId));
     }
 
     @Transactional
     @Override
     public void deleteCourse(long id, String email) {
-        deleteCourse(id, userRepository.findByEmailAndLecturerInfoNotNull(email).orElseThrow(/*TODO*/));
+        deleteCourse(id, getLecturer(email));
+    }
+
+    private User getLecturer(String email) {
+        return userRepository.findByEmailAndLecturerInfoNotNull(email).orElseThrow(ResourceItemNotFoundException::new);
+    }
+
+    private User getLecturer(long userId) {
+        return userRepository.findByIdAndLecturerInfoNotNull(userId).orElseThrow(ResourceItemNotFoundException::new);
     }
 
     private void deleteCourse(long id, User lecturer) {
