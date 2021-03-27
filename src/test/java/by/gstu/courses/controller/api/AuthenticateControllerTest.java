@@ -1,6 +1,5 @@
 package by.gstu.courses.controller.api;
 
-import by.gstu.courses.TestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -11,7 +10,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -36,7 +34,6 @@ class AuthenticateControllerTest {
                 .secure(true)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content("email="+ EMAIL))
-                .andDo(print())
                 .andExpect(status().isCreated())
                 .andDo(document("auth"));
     }

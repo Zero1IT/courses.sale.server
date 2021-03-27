@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.time.Instant;
 
 /**
@@ -17,17 +18,16 @@ public class CourseDto {
     private Long id;
     @NotBlank
     private String title;
-    @NotBlank
+    @NotNull
+    private BigDecimal cost;
     private String description;
     @Future
     @NotNull
     private Instant startDate;
-    @PositiveOrZero
-    @NotNull
-    private Short deferredPaymentDays;
     @Positive
     @NotNull
     private Short places;
+    private String imgUrl;
 
     // ignored for deserialization
     private boolean isClosed;
@@ -66,14 +66,6 @@ public class CourseDto {
         this.startDate = startDate;
     }
 
-    public Short getDeferredPaymentDays() {
-        return deferredPaymentDays;
-    }
-
-    public void setDeferredPaymentDays(Short deferredPaymentDays) {
-        this.deferredPaymentDays = deferredPaymentDays;
-    }
-
     public Short getPlaces() {
         return places;
     }
@@ -110,5 +102,21 @@ public class CourseDto {
     @JsonIgnore
     public void setLecturerId(Long lecturerId) {
         this.lecturerId = lecturerId;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

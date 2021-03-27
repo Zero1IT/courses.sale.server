@@ -14,11 +14,4 @@ public final class Limits {
     public static int pageLimit(int size) {
         return size > PER_PAGE_MAX || size <= 0 ? PER_PAGE_MAX : size;
     }
-
-    public static boolean checkLimitSize(int limit) {
-        if (limit > PER_PAGE_MAX || limit < 0) {
-            throw new IllegalArgumentException("Limit is too much");
-        }
-        return limit == 0;
-    }
 }

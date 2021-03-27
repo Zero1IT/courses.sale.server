@@ -53,15 +53,12 @@ public class SpringBoot {
     public static void main(String[] args) {
         System.setProperty("log4jdbc.drivers", "com.mysql.cj.jdbc.Driver");
         System.setProperty("log4jdbc.auto.load.popular.drivers", "false");
-        ApplicationContext context = SpringApplication.run(SpringBoot.class, args);
+        ApplicationContext context =  SpringApplication.run(SpringBoot.class, args);
         System.out.println(context.getBeanDefinitionCount());
     }
 
     @Bean
-    @ConditionalOnProperty(
-            value = "spring.jpa.show-details-sql",
-            havingValue = "true"
-    )
+    @ConditionalOnProperty(value = "spring.jpa.show-details-sql", havingValue = "true")
     public DataSource dataSource(
             @Value("${spring.datasource.url}") String url,
             @Value("${spring.datasource.username}") String username,

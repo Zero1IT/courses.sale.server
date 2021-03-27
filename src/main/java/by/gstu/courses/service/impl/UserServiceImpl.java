@@ -1,7 +1,7 @@
 package by.gstu.courses.service.impl;
 
-import by.gstu.courses.controller.handler.response.IncompatiblePermissionsException;
-import by.gstu.courses.controller.handler.response.ResourceItemNotFoundException;
+import by.gstu.courses.controller.response.IncompatiblePermissionsException;
+import by.gstu.courses.controller.response.ResourceItemNotFoundException;
 import by.gstu.courses.model.*;
 import by.gstu.courses.repository.RoleRepository;
 import by.gstu.courses.repository.UserRepository;
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsersList(int page, int limit) {
-        return userRepository.findAllUsersOnly(PageRequest.of(page-1, limit, Sort.Direction.DESC, "id"))
+        return userRepository.findByLecturerInfoIsNull(PageRequest.of(page-1, limit, Sort.Direction.DESC, "id"))
                 .getContent();
     }
 
@@ -89,8 +89,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> getUsersPage(Pageable pageable, String email) {
-        return email == null ? userRepository.findAllUsersOnly(pageable) :
-                userRepository.findAllUsersOnlyByEmailIgnoreCase(email, pageable);
+        return email == null ? userRepository.findByLecturerInfoIsNull(pageable) :
+                userRepository.findByEmailContainingIgnoreCaseAndLecturerInfoIsNull(email, pageable);
     }
 
     @Override

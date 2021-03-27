@@ -1,6 +1,6 @@
 package by.gstu.courses.provider;
 
-import by.gstu.courses.controller.handler.response.ResourceItemNotFoundException;
+import by.gstu.courses.controller.response.ResourceItemNotFoundException;
 import by.gstu.courses.exception.JwtAuthenticationException;
 import by.gstu.courses.model.Token;
 import by.gstu.courses.model.User;

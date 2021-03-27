@@ -1,6 +1,7 @@
 package by.gstu.courses.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,12 +19,14 @@ public class Course {
     private String title;
     private String description;
     private Instant startDate;
+    private BigDecimal cost;
     private Short places;
-    private Short deferredPaymentDays;
     private boolean isClosed; // closed for invite
     private boolean isEnded;
-    private User lecturer;
+    private String imgUrl;
 
+    private User lecturer;
+    private User createdBy;
     private Set<User> users = new HashSet<>();
     private Set<CourseTopic> topics = new HashSet<>();
 
@@ -103,21 +106,21 @@ public class Course {
     }
 
     @Column(nullable = false)
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+    @Column(nullable = false)
     public Short getPlaces() {
         return places;
     }
 
     public void setPlaces(Short places) {
         this.places = places;
-    }
-
-    @Column(nullable = false)
-    public Short getDeferredPaymentDays() {
-        return deferredPaymentDays;
-    }
-
-    public void setDeferredPaymentDays(Short deferredPaymentDays) {
-        this.deferredPaymentDays = deferredPaymentDays;
     }
 
     @Column(nullable = false)
@@ -136,5 +139,23 @@ public class Course {
 
     public void setEnded(boolean ended) {
         isEnded = ended;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgPath) {
+        this.imgUrl = imgPath;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false)
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 }

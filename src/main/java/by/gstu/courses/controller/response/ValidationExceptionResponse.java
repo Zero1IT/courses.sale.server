@@ -1,4 +1,4 @@
-package by.gstu.courses.controller.handler.response;
+package by.gstu.courses.controller.response;
 
 import org.springframework.validation.FieldError;
 
@@ -12,11 +12,11 @@ import java.util.Map;
  *
  * @author Alexander Petrushkin
  */
-public class DataExceptionResponse {
+public class ValidationExceptionResponse {
 
     private final Map<String, String> fieldMessage;
 
-    public DataExceptionResponse(Map<String, String> fieldMessage) {
+    public ValidationExceptionResponse(Map<String, String> fieldMessage) {
         this.fieldMessage = fieldMessage;
     }
 
@@ -24,13 +24,13 @@ public class DataExceptionResponse {
         return fieldMessage;
     }
 
-    public static DataExceptionResponse from(List<FieldError> fieldErrors) {
+    public static ValidationExceptionResponse from(List<FieldError> fieldErrors) {
         Map<String, String> map = new HashMap<>();
 
         for (FieldError fieldError : fieldErrors) {
             map.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
 
-        return new DataExceptionResponse(map);
+        return new ValidationExceptionResponse(map);
     }
 }

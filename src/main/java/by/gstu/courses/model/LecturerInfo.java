@@ -36,8 +36,7 @@ public class LecturerInfo {
         this.canPublish = canPublish;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToOne(mappedBy = "lecturerInfo")
     public User getUser() {
         return user;
     }

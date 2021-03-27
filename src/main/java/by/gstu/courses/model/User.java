@@ -96,7 +96,8 @@ public class User {
         this.lastname = lastname;
     }
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "lec_info_id")
     public LecturerInfo getLecturerInfo() {
         return lecturerInfo;
     }
@@ -105,7 +106,7 @@ public class User {
         this.lecturerInfo = lecturerInfo;
     }
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     public Set<Course> getCourses() {
         return courses;
     }

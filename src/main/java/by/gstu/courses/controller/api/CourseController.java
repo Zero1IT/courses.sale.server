@@ -1,10 +1,13 @@
 package by.gstu.courses.controller.api;
 
 import by.gstu.courses.dto.CourseDto;
+import by.gstu.courses.dto.response.EnrollResponse;
 import by.gstu.courses.exception.DataValidationException;
 import by.gstu.courses.model.Course;
 import by.gstu.courses.service.CourseService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,8 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * createdAt: 1/19/2021
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/course")
+@PreAuthorize("hasAuthority(T(by.gstu.courses.model.Permissions).SIGN_UP_LECTURE.name())")
 public class CourseController {
 
     private final CourseService courseService;
@@ -34,13 +36,35 @@ public class CourseController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("{page}")
-    public List<CourseDto> getCourses(@PathVariable int page,
-                                      @RequestParam(name = "limit", defaultValue = "0") int limit) {
+    @PostMapping("enroll/{courseId}")
+    public EnrollResponse enrollToCourse(@PathVariable long courseId) {
+        final Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        courseService.enroll(userId, courseId);
+        return new EnrollResponse(userId, courseId, true);
+    }
 
-        return courseService.getList(page, Limits.pageLimit(limit)).stream()
-                .map(it -> modelMapper.map(it, CourseDto.class))
-                .collect(Collectors.toList());
+    @GetMapping("enroll/{courseId}")
+    public EnrollResponse checkEnrolled(@PathVariable long courseId) {
+        final Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        return new EnrollResponse(userId, courseId, courseService.isEnrolled(userId, courseId));
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("enroll/{courseId}")
+    public void unenrollUser(@PathVariable long courseId) {
+        final Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        courseService.unenroll(userId, courseId); // TODO: if false - not found
+    }
+
+    @GetMapping("/enrolled/{page}")
+    public Page<CourseDto> enrolledCourses(@PathVariable long page) {
+        return Page.empty(); // TODO
+    }
+
+    @PreAuthorize("hasAuthority(T(by.gstu.courses.model.Permissions).CONTROL_LECTURE.name())")
+    @GetMapping("/owned/{page}")
+    public Page<CourseDto> ownedCourses(@PathVariable long page) {
+        return Page.empty(); // TODO
     }
 
     @PreAuthorize("hasAuthority(T(by.gstu.courses.model.Permissions).CONTROL_LECTURE.name())")

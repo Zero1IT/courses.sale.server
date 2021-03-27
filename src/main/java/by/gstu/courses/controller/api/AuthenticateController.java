@@ -17,6 +17,9 @@ import java.util.UUID;
  * createdAt: 11/22/2020
  * project: SaleCoursesServer
  *
+ * !!!
+ * @see by.gstu.courses.config.security.JwtAuthenticationFilter handles '/api/auth/login' route
+ * !!!
  * @author Alexander Petrushkin
  */
 @RestController

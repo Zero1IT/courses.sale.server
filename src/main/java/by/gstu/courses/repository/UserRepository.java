@@ -1,11 +1,13 @@
 package by.gstu.courses.repository;
 
+import by.gstu.courses.model.Role;
 import by.gstu.courses.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,9 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByIdAndLecturerInfoNotNull(Long id);
     Page<User> findByEmailContainingIgnoreCase(String email, Pageable pageable);
     Page<User> findByEmailContainingIgnoreCaseAndLecturerInfoNotNull(String email, Pageable pageable);
-    @Query("select u from User u where type(u)=User")
-    Page<User> findAllUsersOnly(Pageable pageable);
-    @Query("select u from User u where type(u)=User and upper(u.email) like upper(concat('%',:email,'%'))")
-    Page<User> findAllUsersOnlyByEmailIgnoreCase(String email, Pageable pageable);
+    Page<User> findByEmailContainingIgnoreCaseAndLecturerInfoIsNull(String email, Pageable pageable);
+    Page<User> findByLecturerInfoIsNull(Pageable pageable);
     Page<User> findByLecturerInfoNotNull(Pageable pageable);
+    List<User> findByRole(Role role);
 }

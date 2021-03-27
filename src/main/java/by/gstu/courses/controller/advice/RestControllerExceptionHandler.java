@@ -1,6 +1,6 @@
-package by.gstu.courses.controller.handler;
+package by.gstu.courses.controller.advice;
 
-import by.gstu.courses.controller.handler.response.DataExceptionResponse;
+import by.gstu.courses.controller.response.ValidationExceptionResponse;
 import by.gstu.courses.exception.DataValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -21,18 +21,18 @@ import java.util.HashMap;
 @ResponseBody
 public class RestControllerExceptionHandler {
 
-    private static final String ERROR_KEY = "__error";
+    private static final String ERROR_KEY = "_error";
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataValidationException.class)
-    public DataExceptionResponse dataValidationExceptionHandler(DataValidationException e) {
+    public ValidationExceptionResponse dataValidationExceptionHandler(DataValidationException e) {
         final BindingResult bindingResult = e.getBindingResult();
         if (bindingResult != null) {
-            return DataExceptionResponse.from(bindingResult.getFieldErrors());
+            return ValidationExceptionResponse.from(bindingResult.getFieldErrors());
         } else {
             final HashMap<String, String> map = new HashMap<>();
             map.put(ERROR_KEY, e.getMessage());
-            return new DataExceptionResponse(map);
+            return new ValidationExceptionResponse(map);
         }
     }
 }
