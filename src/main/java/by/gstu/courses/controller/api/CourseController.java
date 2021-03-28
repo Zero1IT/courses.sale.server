@@ -1,5 +1,6 @@
 package by.gstu.courses.controller.api;
 
+import by.gstu.courses.controller.Utils;
 import by.gstu.courses.dto.CourseDto;
 import by.gstu.courses.dto.response.EnrollResponse;
 import by.gstu.courses.exception.DataValidationException;
@@ -38,33 +39,37 @@ public class CourseController {
 
     @PostMapping("enroll/{courseId}")
     public EnrollResponse enrollToCourse(@PathVariable long courseId) {
-        final Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        final long userId = Utils.getCurrentUserId();
         courseService.enroll(userId, courseId);
         return new EnrollResponse(userId, courseId, true);
     }
 
     @GetMapping("enroll/{courseId}")
     public EnrollResponse checkEnrolled(@PathVariable long courseId) {
-        final Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        final long userId = Utils.getCurrentUserId();
         return new EnrollResponse(userId, courseId, courseService.isEnrolled(userId, courseId));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("enroll/{courseId}")
     public void unenrollUser(@PathVariable long courseId) {
-        final Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        final long userId = Utils.getCurrentUserId();
         courseService.unenroll(userId, courseId); // TODO: if false - not found
     }
 
     @GetMapping("/enrolled/{page}")
-    public Page<CourseDto> enrolledCourses(@PathVariable long page) {
-        return Page.empty(); // TODO
+    public Page<CourseDto> enrolledCourses(@PathVariable int page) {
+        final long userId = Utils.getCurrentUserId();
+        final Page<Course> courses = courseService.getUserEnrolledCourses(userId, PageRequest.of(page-1, 10));
+        return courses.map(it -> modelMapper.map(it, CourseDto.class));
     }
 
     @PreAuthorize("hasAuthority(T(by.gstu.courses.model.Permissions).CONTROL_LECTURE.name())")
     @GetMapping("/owned/{page}")
-    public Page<CourseDto> ownedCourses(@PathVariable long page) {
-        return Page.empty(); // TODO
+    public Page<CourseDto> ownedCourses(@PathVariable int page) {
+        final long userId = Utils.getCurrentUserId();
+        final Page<Course> courses = courseService.getCoursesByOwner(userId, PageRequest.of(page-1, 10));
+        return courses.map(it -> modelMapper.map(it, CourseDto.class));
     }
 
     @PreAuthorize("hasAuthority(T(by.gstu.courses.model.Permissions).CONTROL_LECTURE.name())")

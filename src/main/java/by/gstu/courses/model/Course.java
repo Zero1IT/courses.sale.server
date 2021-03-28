@@ -68,6 +68,16 @@ public class Course {
         this.lecturer = lecturer;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false)
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
     @ManyToMany
     @JoinTable(
             name = "courses_to_users",
@@ -147,15 +157,5 @@ public class Course {
 
     public void setImgUrl(String imgPath) {
         this.imgUrl = imgPath;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false)
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
     }
 }

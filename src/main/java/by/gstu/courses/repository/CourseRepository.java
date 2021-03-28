@@ -27,4 +27,5 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("select c from Course c where c.id=:id")
     Optional<Course> lockFindById(Long id);
     Page<Course> findByLecturer(User lecturer, Pageable pageable);
+    Page<Course> findByUsersId(Long userId, Pageable pageable);
 }

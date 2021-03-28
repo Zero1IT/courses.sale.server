@@ -27,6 +27,7 @@ import java.util.Set;
  * @author Alexander Petrushkin
  */
 @Service
+@Transactional
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
@@ -55,29 +56,81 @@ public class CourseServiceImpl implements CourseService {
         return createCourse(course, getLecturer(email));
     }
 
-    @NotNull
-    private Course createCourse(Course course, User lecturer) {
-        course.setId(null);
-        course.setClosed(false);
-        course.setEnded(false);
-        course.setLecturer(lecturer);
-        if (course.getImgUrl() == null) {
-            course.setImgUrl(defaultCourseImagePath);
-        }
-        course.setCreatedBy(lecturer); // TODO: allow any cases
-        return courseRepository.save(course);
-    }
-
-    @Transactional
     @Override
     public Course updateCourse(Course course, long userId) {
         return updateCourse(course, getLecturer(userId));
     }
 
-    @Transactional
     @Override
     public Course updateCourse(Course course, String email) {
         return updateCourse(course, getLecturer(email));
+    }
+
+    @Override
+    public void deleteCourse(long id, long userId) {
+        deleteCourse(id, getLecturer(userId));
+    }
+
+    @Override
+    public void deleteCourse(long id, String email) {
+        deleteCourse(id, getLecturer(email));
+    }
+
+    @Override
+    public List<Course> getList(int page, int limit) {
+        return courseRepository.findAll(PageRequest.of(page-1, limit, Sort.Direction.DESC, "id"))
+                .getContent();
+    }
+
+    @Override
+    public Page<Course> getPage(Pageable pageable) {
+        return courseRepository.findAll(pageable);
+    }
+
+    @Override
+    public void enroll(Long userId, Long courseId) {
+        final User user = userRepository.findById(userId)
+                .orElseThrow(ResourceItemNotFoundException::new);
+        final Course course = courseRepository.lockFindById(courseId)
+                .orElseThrow(ResourceItemNotFoundException::new);
+
+        final Set<User> subscribers = course.getUsers();
+        if (!subscribers.contains(user) && subscribers.size() < course.getPlaces()) {
+            subscribers.add(user);
+        } else {
+            // TODO: you know what you should to do
+        }
+    }
+
+    @Override
+    public boolean unenroll(Long userId, Long courseId) {
+        final User user = userRepository.findById(userId)
+                .orElseThrow(ResourceItemNotFoundException::new);
+        return courseRepository.lockFindById(courseId)
+                .orElseThrow(ResourceItemNotFoundException::new)
+                .getUsers().remove(user);
+    }
+
+    @Override
+    public boolean isEnrolled(Long userId, Long courseId) {
+        final User user = userRepository.findById(userId)
+                .orElseThrow(ResourceItemNotFoundException::new);
+        return courseRepository.lockFindById(courseId)
+                .orElseThrow(ResourceItemNotFoundException::new)
+                .getUsers().contains(user);
+    }
+
+    @Override
+    public Page<Course> getCoursesByOwner(long ownerId, Pageable pageable) {
+        return userRepository.findByIdAndLecturerInfoNotNull(ownerId)
+                .map(it -> courseRepository.findByLecturer(it, pageable))
+                .orElse(Page.empty());
+    }
+
+    @Transactional
+    @Override
+    public Page<Course> getUserEnrolledCourses(long userId, Pageable pageable) {
+        return courseRepository.findByUsersId(userId, pageable);
     }
 
     @NotNull
@@ -96,74 +149,17 @@ public class CourseServiceImpl implements CourseService {
         return updatedCourse;
     }
 
-    @Transactional
-    @Override
-    public void deleteCourse(long id, long userId) {
-        deleteCourse(id, getLecturer(userId));
-    }
-
-    @Transactional
-    @Override
-    public void deleteCourse(long id, String email) {
-        deleteCourse(id, getLecturer(email));
-    }
-
-    @Override
-    public List<Course> getList(int page, int limit) {
-        return courseRepository.findAll(PageRequest.of(page-1, limit, Sort.Direction.DESC, "id"))
-                .getContent();
-    }
-
-    @Override
-    public Page<Course> getPage(Pageable pageable) {
-        return courseRepository.findAll(pageable);
-    }
-
-    @Transactional
-    @Override
-    public void enroll(Long userId, Long courseId) {
-        final User user = userRepository.findById(userId)
-                .orElseThrow(ResourceItemNotFoundException::new);
-        final Course course = courseRepository.lockFindById(courseId)
-                .orElseThrow(ResourceItemNotFoundException::new);
-
-        final Set<User> subscribers = course.getUsers();
-        if (!subscribers.contains(user) && subscribers.size() < course.getPlaces()) {
-            subscribers.add(user);
-        } else {
-            // TODO: you know what you should to do
+    @NotNull
+    private Course createCourse(Course course, User lecturer) {
+        course.setId(null);
+        course.setClosed(false);
+        course.setEnded(false);
+        course.setLecturer(lecturer);
+        if (course.getImgUrl() == null) {
+            course.setImgUrl(defaultCourseImagePath);
         }
-    }
-
-    @Transactional
-    @Override
-    public boolean unenroll(Long userId, Long courseId) {
-        final User user = userRepository.findById(userId)
-                .orElseThrow(ResourceItemNotFoundException::new);
-        return courseRepository.lockFindById(courseId)
-                .orElseThrow(ResourceItemNotFoundException::new)
-                .getUsers().remove(user);
-    }
-
-    @Transactional
-    @Override
-    public boolean isEnrolled(Long userId, Long courseId) {
-        final User user = userRepository.findById(userId)
-                .orElseThrow(ResourceItemNotFoundException::new);
-        return courseRepository.lockFindById(courseId)
-                .orElseThrow(ResourceItemNotFoundException::new)
-                .getUsers().contains(user);
-    }
-
-    @Override
-    public Page<Course> getCoursesByOwner(long ownerId) {
-        //courseRepository.findByIdAndLecturer()
-        return null;
-    }
-
-    @Override
-    public Page<Course> getUserEnrolledCourses(long userId) {
-        return null;
+        course.setCreatedBy(lecturer); // TODO: allow any cases
+        return courseRepository.save(course);
     }
 
     private User getLecturer(String email) {
