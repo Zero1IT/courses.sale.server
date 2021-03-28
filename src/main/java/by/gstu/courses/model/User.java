@@ -15,11 +15,12 @@ import java.util.Set;
 public class User {
     private Long id;
     private Role role;
-    private String login;
-    private String email;
-    private String password;
     private String name;
     private String lastname;
+    private String login;
+    private String email;
+    private String phone;
+    private String password;
     private boolean isConfirmed;
 
     private LecturerInfo lecturerInfo;
@@ -94,6 +95,15 @@ public class User {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    @Column(unique = true)
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phoneNumber) {
+        this.phone = phoneNumber;
     }
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -1,6 +1,7 @@
 package by.gstu.courses.controller.api;
 
 import by.gstu.courses.dto.AuthenticationDto;
+import by.gstu.courses.exception.DataValidationException;
 import by.gstu.courses.exception.JwtAuthenticationException;
 import by.gstu.courses.model.User;
 import by.gstu.courses.provider.JwtTokenProvider;
@@ -63,14 +64,20 @@ public class AuthenticateController {
     @PostMapping("registration")
     @ResponseStatus(HttpStatus.CREATED)
     public void registration(@RequestBody AuthenticationDto dto) {
+        // TODO: duplicate activation link if not confirmed
         final String code = UUID.randomUUID().toString();
         final String link = String.format(verifyLinkFormat, domain, code);
-        final User user = new User();
-        user.setName(dto.getName());
-        user.setLastname(dto.getLastname());
-        user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
-        emailService.sendActivationLink(user.getEmail(), link, null);
-        authenticateService.registrationUser(user, code);
+        if (dto.getPassword() != null && dto.getPassword().equals(dto.getRepeatedPassword())) {
+            final User user = new User();
+            user.setName(dto.getName());
+            user.setLastname(dto.getLastname());
+            user.setEmail(dto.getEmail());
+            user.setPassword(dto.getPassword());
+            user.setPhone(dto.getPhone());
+            emailService.sendActivationLink(user.getEmail(), link, null);
+            authenticateService.registrationUser(user, code);
+        } else {
+            throw new DataValidationException("repeatedPassword", "passwords are not equal"); // TODO: user resource
+        }
     }
 }
