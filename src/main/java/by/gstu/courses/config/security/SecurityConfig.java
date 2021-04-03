@@ -1,6 +1,6 @@
 package by.gstu.courses.config.security;
 
-import by.gstu.courses.provider.JwtTokenProvider;
+import by.gstu.courses.providers.JwtTokenProvider;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

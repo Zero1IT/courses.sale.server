@@ -1,6 +1,6 @@
 package by.gstu.courses.repository;
 
-import by.gstu.courses.model.TempUser;
+import by.gstu.courses.domain.TempUser;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

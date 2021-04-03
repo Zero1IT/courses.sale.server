@@ -1,8 +1,8 @@
 package by.gstu.courses;
 
-import by.gstu.courses.model.PermanentRoles;
-import by.gstu.courses.model.Permissions;
-import by.gstu.courses.model.Role;
+import by.gstu.courses.domain.PermanentRoles;
+import by.gstu.courses.domain.Permissions;
+import by.gstu.courses.domain.Role;
 import by.gstu.courses.repository.RoleRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

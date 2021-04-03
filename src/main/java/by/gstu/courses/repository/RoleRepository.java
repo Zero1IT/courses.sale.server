@@ -1,6 +1,6 @@
 package by.gstu.courses.repository;
 
-import by.gstu.courses.model.Role;
+import by.gstu.courses.domain.Role;
 import org.springframework.data.repository.CrudRepository;
 
 /**

@@ -1,6 +1,6 @@
 package by.gstu.courses.dto;
 
-import by.gstu.courses.model.Role;
+import by.gstu.courses.domain.Role;
 import lombok.Getter;
 import lombok.Setter;
 

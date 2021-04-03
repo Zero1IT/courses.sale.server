@@ -46,7 +46,7 @@ import javax.sql.DataSource;
         SecurityAutoConfiguration.class
 })
 @EnableJpaRepositories(basePackages = "by.gstu.courses.repository")
-@EntityScan(basePackages = "by.gstu.courses.model")
+@EntityScan(basePackages = "by.gstu.courses.domain")
 @PropertySource("classpath:credentials.secure.properties")
 public class SpringBoot {
 

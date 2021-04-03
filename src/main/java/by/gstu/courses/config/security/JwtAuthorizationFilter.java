@@ -1,7 +1,7 @@
 package by.gstu.courses.config.security;
 
-import by.gstu.courses.exception.JwtAuthenticationException;
-import by.gstu.courses.provider.JwtTokenProvider;
+import by.gstu.courses.exceptions.JwtAuthenticationException;
+import by.gstu.courses.providers.JwtTokenProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

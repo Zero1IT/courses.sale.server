@@ -1,7 +1,7 @@
 package by.gstu.courses.config.security;
 
 import by.gstu.courses.dto.AuthenticationDto;
-import by.gstu.courses.provider.JwtTokenProvider;
+import by.gstu.courses.providers.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

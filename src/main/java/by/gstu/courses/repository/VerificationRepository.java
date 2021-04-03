@@ -1,6 +1,6 @@
 package by.gstu.courses.repository;
 
-import by.gstu.courses.model.VerificationCode;
+import by.gstu.courses.domain.VerificationCode;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

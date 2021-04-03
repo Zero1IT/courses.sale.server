@@ -1,7 +1,7 @@
 package by.gstu.courses.repository;
 
-import by.gstu.courses.model.Token;
-import by.gstu.courses.model.User;
+import by.gstu.courses.domain.Token;
+import by.gstu.courses.domain.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

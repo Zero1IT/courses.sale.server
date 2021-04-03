@@ -1,7 +1,7 @@
 package by.gstu.courses.repository;
 
-import by.gstu.courses.model.Role;
-import by.gstu.courses.model.User;
+import by.gstu.courses.domain.Role;
+import by.gstu.courses.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
