@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Alexander Petrushkin
  */
-public interface UserService extends DefaultService<User> {
+public interface UserService {
     User giveLecturerPermissions(String userEmail);
     User giveLecturerPermissions(Long id);
     List<User> getUsersList(int page, int limit);
@@ -21,4 +21,5 @@ public interface UserService extends DefaultService<User> {
     Page<User> getLecturePage(Pageable pageable, String email);
     Page<User> getPageByEmail(Pageable pageable, String email);
     User changeRole(Long userId, String newRoleName);
+    List<User> getList(int page, int limit);
 }

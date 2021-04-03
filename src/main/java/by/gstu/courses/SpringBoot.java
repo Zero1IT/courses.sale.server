@@ -31,13 +31,10 @@ import javax.sql.DataSource;
  * @author Alexander Petrushkin
  */
 @SpringBootApplication(exclude = {
-        //DataSourceAutoConfiguration.class,
-        //DataSourceTransactionManagerAutoConfiguration.class,
-        //HibernateJpaAutoConfiguration.class,
         WebSocketServletAutoConfiguration.class,
         TaskExecutionAutoConfiguration.class,
         AopAutoConfiguration.class,
-        TaskSchedulingAutoConfiguration.class,
+        //TaskSchedulingAutoConfiguration.class,
         JdbcTemplateAutoConfiguration.class,
         RestTemplateAutoConfiguration.class,
         ErrorMvcAutoConfiguration.class,
@@ -53,7 +50,7 @@ public class SpringBoot {
     public static void main(String[] args) {
         System.setProperty("log4jdbc.drivers", "com.mysql.cj.jdbc.Driver");
         System.setProperty("log4jdbc.auto.load.popular.drivers", "false");
-        ApplicationContext context =  SpringApplication.run(SpringBoot.class, args);
+        ApplicationContext context = SpringApplication.run(SpringBoot.class, args);
         System.out.println(context.getBeanDefinitionCount());
     }
 

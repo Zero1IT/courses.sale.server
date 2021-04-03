@@ -116,9 +116,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll(PageRequest.of(page-1, limit, Sort.Direction.DESC, "id"))
                 .getContent();
     }
-
-    @Override
-    public Page<User> getPage(Pageable pageable) {
-        return userRepository.findAll(pageable);
-    }
 }

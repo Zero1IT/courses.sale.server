@@ -33,7 +33,7 @@ public class PublicCourseController {
     @GetMapping("page/{page}")
     public Page<CourseDto> getCourses(@PathVariable int page,
                                       @RequestParam(required = false, defaultValue = "12") int limit) {
-        return courseService.getPage(PageRequest.of(page - 1, Limits.pageLimit(limit)))
+        return courseService.getActualCourses(PageRequest.of(page - 1, Limits.pageLimit(limit)))
                 .map(course -> modelMapper.map(course, CourseDto.class));
     }
 }

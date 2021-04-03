@@ -38,10 +38,10 @@ public class Course {
     private Short places;
 
     @Column(nullable = false)
-    private boolean isClosed; // closed for invite
+    private boolean closed; // closed for invite
 
     @Column(nullable = false)
-    private boolean isEnded;
+    private boolean ended;
 
     private String imgUrl;
 

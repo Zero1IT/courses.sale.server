@@ -1,8 +1,8 @@
 package by.gstu.courses.controllers.api.courses;
 
 import by.gstu.courses.controllers.Utils;
-import by.gstu.courses.dto.CourseDto;
 import by.gstu.courses.domain.Course;
+import by.gstu.courses.dto.CourseDto;
 import by.gstu.courses.services.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
