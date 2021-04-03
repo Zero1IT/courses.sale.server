@@ -1,5 +1,7 @@
 package by.gstu.courses.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
@@ -8,45 +10,24 @@ import javax.persistence.*;
  *
  * @author Alexander Petrushkin
  */
+@Data
 @Entity
 @Table(name = "refresh_jwt_tokens")
 public class Token {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String jws;
+
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Token() {
     }
 
     public Token(User user) {
-        this.user = user;
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getJws() {
-        return jws;
-    }
-
-    public void setJws(String jws) {
-        this.jws = jws;
-    }
-
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
         this.user = user;
     }
 }

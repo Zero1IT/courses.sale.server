@@ -1,5 +1,7 @@
 package by.gstu.courses.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -9,48 +11,19 @@ import java.util.Set;
  *
  * @author Alexander Petrushkin
  */
+@Data
 @Entity
 @Table(name = "lecturer_info")
 public class LecturerInfo {
-    private long id;
-    private boolean canPublish = true;
-
-    private User user;
-    private Set<Course> ownCourses;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getId() {
-        return id;
-    }
+    private long id;
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public boolean isCanPublish() {
-        return canPublish;
-    }
-
-    public void setCanPublish(boolean canPublish) {
-        this.canPublish = canPublish;
-    }
+    private boolean canPublish = true;
 
     @OneToOne(mappedBy = "lecturerInfo")
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    private User user;
 
     @OneToMany(mappedBy = "lecturer", fetch = FetchType.LAZY)
-    public Set<Course> getOwnCourses() {
-        return ownCourses;
-    }
-
-    public void setOwnCourses(Set<Course> courses) {
-        this.ownCourses = courses;
-    }
+    private Set<Course> ownCourses;
 }

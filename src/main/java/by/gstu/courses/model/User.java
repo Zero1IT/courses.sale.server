@@ -1,5 +1,7 @@
 package by.gstu.courses.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,118 +12,43 @@ import java.util.Set;
  *
  * @author Alexander Petrushkin
  */
+@Data
 @Entity
 @Table(name = "users", indexes = {@Index(columnList = "email", name = "user_email")})
 public class User {
-    private Long id;
-    private Role role;
-    private String name;
-    private String lastname;
-    private String login;
-    private String email;
-    private String phone;
-    private String password;
-    private boolean isConfirmed;
-
-    private LecturerInfo lecturerInfo;
-    private Set<Course> courses = new HashSet<>();
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "name", nullable = false)
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    @Column(unique = true)
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    private Role role;
 
     @Column(nullable = false)
-    public boolean isConfirmed() {
-        return isConfirmed;
-    }
+    private String name;
 
-    public void setConfirmed(boolean confirmed) {
-        isConfirmed = confirmed;
-    }
+    @Column(nullable = false)
+    private String lastname;
 
     @Column(unique = true)
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
+    private String login;
 
     @Column(unique = true)
-    public String getPhone() {
-        return phone;
-    }
+    private String email;
 
-    public void setPhone(String phoneNumber) {
-        this.phone = phoneNumber;
-    }
+    @Column(unique = true)
+    private String phone;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private boolean isConfirmed;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "lec_info_id")
-    public LecturerInfo getLecturerInfo() {
-        return lecturerInfo;
-    }
-
-    public void setLecturerInfo(LecturerInfo lecturerInfo) {
-        this.lecturerInfo = lecturerInfo;
-    }
+    private LecturerInfo lecturerInfo;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    public Set<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
-    }
+    private Set<Course> courses = new HashSet<>();
 }

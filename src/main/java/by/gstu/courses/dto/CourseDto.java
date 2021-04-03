@@ -2,6 +2,8 @@ package by.gstu.courses.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -13,6 +15,8 @@ import java.time.Instant;
  *
  * @author Alexander Petrushkin
  */
+@Getter
+@Setter
 public class CourseDto {
     @PositiveOrZero
     private Long id;
@@ -28,51 +32,11 @@ public class CourseDto {
     @NotNull
     private Short places;
     private String imgUrl;
-
+    
     // ignored for deserialization
     private boolean isClosed;
     private boolean isEnded;
     private Long lecturerId;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Instant getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Instant startDate) {
-        this.startDate = startDate;
-    }
-
-    public Short getPlaces() {
-        return places;
-    }
-
-    public void setPlaces(Short places) {
-        this.places = places;
-    }
 
     @JsonProperty
     public boolean isClosed() {
@@ -102,21 +66,5 @@ public class CourseDto {
     @JsonIgnore
     public void setLecturerId(Long lecturerId) {
         this.lecturerId = lecturerId;
-    }
-
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
     }
 }

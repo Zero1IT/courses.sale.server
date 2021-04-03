@@ -1,5 +1,7 @@
 package by.gstu.courses.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,44 +12,22 @@ import java.util.Set;
  *
  * @author Alexander Petrushkin
  */
+@Data
 @Entity
 @Table(name = "course_topics")
 public class CourseTopic {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
 
+    @ManyToMany(mappedBy = "topics")
     private Set<Course> courses = new HashSet<>();
 
     public CourseTopic() { }
-
     public CourseTopic(String name) {
         this.name = name;
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @ManyToMany(mappedBy = "topics")
-    public Set<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
     }
 }
