@@ -1,4 +1,4 @@
-package by.gstu.courses.controller.api;
+package by.gstu.courses.controller.api.courses;
 
 import by.gstu.courses.controller.Utils;
 import by.gstu.courses.dto.CourseDto;

@@ -1,5 +1,6 @@
-package by.gstu.courses.controller.api;
+package by.gstu.courses.controller.api.courses;
 
+import by.gstu.courses.controller.Limits;
 import by.gstu.courses.dto.CourseDto;
 import by.gstu.courses.service.CourseService;
 import org.modelmapper.ModelMapper;

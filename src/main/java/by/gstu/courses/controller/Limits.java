@@ -1,4 +1,4 @@
-package by.gstu.courses.controller.api;
+package by.gstu.courses.controller;
 
 /**
  * createdAt: 1/23/2021
