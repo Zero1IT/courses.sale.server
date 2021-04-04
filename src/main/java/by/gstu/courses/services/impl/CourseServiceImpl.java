@@ -57,4 +57,10 @@ public class CourseServiceImpl implements CourseService {
     public Page<Course> getActualCourses(PageRequest pageRequest) {
         return courseRepository.getActualCourses(pageRequest);
     }
+
+    @Override
+    public Page<Course> getUsersInCourse(long ownerId, long courseId, Pageable pageable) {
+
+        return null;
+    }
 }

@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Set;
 
 /**
  * createdAt: 1/19/2021
@@ -32,6 +33,7 @@ public class CourseDto {
     @NotNull
     private Short places;
     private String imgUrl;
+    private Set<CourseTopicDto> topics;
     
     // ignored for deserialization
     private boolean isClosed;

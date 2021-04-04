@@ -20,4 +20,5 @@ public interface CourseService {
     Page<Course> getCoursesByOwner(long ownerId, Pageable pageable);
     Page<Course> getUserEnrolledCourses(long userId, Pageable pageable);
     Page<Course> getActualCourses(PageRequest pageRequest);
+    Page<Course> getUsersInCourse(long ownerId, long courseId, Pageable pageable);
 }

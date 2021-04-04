@@ -8,9 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
  *
  * @author Alexander Petrushkin
  */
-public final class Utils {
+public final class AccountInfo {
 
-    private Utils() {}
+    private AccountInfo() {}
 
     public static long getCurrentUserId() {
         return (long) SecurityContextHolder.getContext().getAuthentication().getDetails();

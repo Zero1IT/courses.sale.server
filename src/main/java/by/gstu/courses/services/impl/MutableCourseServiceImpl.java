@@ -2,9 +2,11 @@ package by.gstu.courses.services.impl;
 
 import by.gstu.courses.controllers.response.ResourceItemNotFoundException;
 import by.gstu.courses.domain.Course;
+import by.gstu.courses.domain.CourseTopic;
 import by.gstu.courses.domain.User;
 import by.gstu.courses.exceptions.NotFoundException;
 import by.gstu.courses.repository.CourseRepository;
+import by.gstu.courses.repository.CourseTopicsRepository;
 import by.gstu.courses.repository.UserRepository;
 import by.gstu.courses.services.MutableCourseService;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +15,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * createdAt: 1/17/2021
@@ -27,6 +31,7 @@ import java.util.Set;
 @Transactional
 public class MutableCourseServiceImpl implements MutableCourseService {
 
+    private final CourseTopicsRepository courseTopicsRepository;
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
 
@@ -90,14 +95,30 @@ public class MutableCourseServiceImpl implements MutableCourseService {
 
     @NotNull
     private Course createCourse(Course course, User lecturer) {
+        final Set<CourseTopic> usersCourseTopics = course.getTopics();
+        if (usersCourseTopics.size() > 5) {
+            throw new IllegalArgumentException("too much topics"); // TODO: translate
+        }
+
+        usersCourseTopics.forEach(it -> it.setName(it.getName().toLowerCase())); // to db only lc
+        final HashSet<CourseTopic> courseTopics = new HashSet<>(usersCourseTopics);
+        if (course.getImgUrl() == null) {
+            course.setImgUrl(defaultCourseImagePath);
+        }
+
+        // TODO: optimize
+        final List<String> topics = courseTopics.stream()
+                .map(CourseTopic::getName)
+                .collect(Collectors.toList());
+        final Set<CourseTopic> persistedTopics = courseTopicsRepository.findByNameIn(topics);
+        persistedTopics.addAll(courseTopics);
+        course.setTopics(persistedTopics);
         course.setId(null);
         course.setClosed(false);
         course.setEnded(false);
         course.setLecturer(lecturer);
-        if (course.getImgUrl() == null) {
-            course.setImgUrl(defaultCourseImagePath);
-        }
         course.setCreatedBy(lecturer); // TODO: allow any cases
+
         return courseRepository.save(course);
     }
 

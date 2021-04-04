@@ -29,17 +29,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .requiresChannel()
-            .anyRequest()
-            .requiresSecure()
-        .and()
-            .cors().and().csrf().disable()
-            .authorizeRequests()
-            .antMatchers(HttpMethod.POST, "/api/auth/login").anonymous()
-            //.antMatchers(HttpMethod.GET, "/verify/*", "/activate/*").permitAll()
-        .and()
-            .addFilter(new JwtAuthenticationFilter(authenticationManager(), tokenProvider))
-            .addFilter(new JwtAuthorizationFilter(authenticationManager(), tokenProvider))
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .requiresChannel()
+                .anyRequest()
+                .requiresSecure()
+            .and()
+                .cors().and().csrf().disable()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/auth/login").anonymous()
+                //.antMatchers(HttpMethod.GET, "/verify/*", "/activate/*").permitAll()
+            .and()
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), tokenProvider))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), tokenProvider))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+                .headers()
+                .xssProtection()
+                .and()
+                .contentSecurityPolicy("script-src 'self'");
     }
 }

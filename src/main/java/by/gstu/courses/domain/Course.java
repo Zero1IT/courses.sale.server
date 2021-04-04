@@ -1,6 +1,7 @@
 package by.gstu.courses.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -53,7 +54,7 @@ public class Course {
     @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false)
     private User createdBy;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "courses_to_users",
             joinColumns = {@JoinColumn(name = "course_id")},
@@ -61,11 +62,14 @@ public class Course {
     )
     private Set<User> users = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE
+    })
     @JoinTable(
             name = "courses_to_topics",
-            joinColumns = {@JoinColumn(name = "course_id")},
-            inverseJoinColumns = {@JoinColumn(name = "topic_id")}
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "topic_id")
     )
+    @BatchSize(size = 5)
     private Set<CourseTopic> topics = new HashSet<>();
 }

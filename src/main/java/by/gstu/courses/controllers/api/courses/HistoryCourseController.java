@@ -1,6 +1,6 @@
 package by.gstu.courses.controllers.api.courses;
 
-import by.gstu.courses.controllers.Utils;
+import by.gstu.courses.controllers.AccountInfo;
 import by.gstu.courses.domain.Course;
 import by.gstu.courses.dto.CourseDto;
 import by.gstu.courses.services.CourseService;
@@ -30,7 +30,7 @@ public class HistoryCourseController {
 
     @GetMapping("/enrolled/{page}")
     public Page<CourseDto> enrolledCourses(@PathVariable int page) {
-        final long userId = Utils.getCurrentUserId();
+        final long userId = AccountInfo.getCurrentUserId();
         final Page<Course> courses = courseService.getUserEnrolledCourses(userId, PageRequest.of(page-1, 10));
         return courses.map(it -> modelMapper.map(it, CourseDto.class));
     }
@@ -38,7 +38,7 @@ public class HistoryCourseController {
     @PreAuthorize("hasAuthority(T(by.gstu.courses.domain.Permissions).CONTROL_LECTURE.name())")
     @GetMapping("/owned/{page}")
     public Page<CourseDto> ownedCourses(@PathVariable int page) {
-        final long userId = Utils.getCurrentUserId();
+        final long userId = AccountInfo.getCurrentUserId();
         final Page<Course> courses = courseService.getCoursesByOwner(userId, PageRequest.of(page-1, 10));
         return courses.map(it -> modelMapper.map(it, CourseDto.class));
     }

@@ -17,3 +17,5 @@ gradle-app.setting
 
 *.secure.properties
 *.p12
+
+ESAPI.properties
