@@ -30,20 +30,23 @@ public class User {
     @Column(nullable = false)
     private String lastname;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String login;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String phone;
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
-    private boolean isConfirmed;
+    private boolean confirmed;
+
+    @Column(nullable = false)
+    private boolean phonePublic;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "lec_info_id")

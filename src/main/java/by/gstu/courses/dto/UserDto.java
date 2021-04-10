@@ -33,6 +33,6 @@ public class UserDto {
     private String name;
     @NotBlank
     private String lastname;
-    private boolean isConfirmed;
+    private boolean confirmed;
     private LecturerInfoDto lecturerInfo;
 }

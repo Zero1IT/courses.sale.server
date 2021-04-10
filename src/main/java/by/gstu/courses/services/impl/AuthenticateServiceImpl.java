@@ -68,8 +68,8 @@ public class AuthenticateServiceImpl implements AuthenticateService {
             throw new UserExistsException("User with current email already exists");
         }
 
-        roleRepository.findById(PermanentRoles.DEFAULT.name())
-                .ifPresent(user::setRole);
+        // TODO: if not exists?
+        roleRepository.findById(PermanentRoles.DEFAULT.name()).ifPresent(user::setRole);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmed(false);
 
