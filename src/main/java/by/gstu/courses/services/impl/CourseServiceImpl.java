@@ -1,6 +1,6 @@
 package by.gstu.courses.services.impl;
 
-import by.gstu.courses.controllers.response.ResourceItemNotFoundException;
+import by.gstu.courses.exceptions.ResourceItemNotFoundException;
 import by.gstu.courses.domain.Course;
 import by.gstu.courses.domain.User;
 import by.gstu.courses.repository.CourseRepository;

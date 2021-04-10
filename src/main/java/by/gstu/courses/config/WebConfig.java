@@ -26,7 +26,7 @@ import java.util.Locale;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${spring.paths.crs}")
+    @Value("${app.paths.crs}")
     private String crsImagesPath;
 
     @Bean

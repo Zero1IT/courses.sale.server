@@ -45,7 +45,7 @@ public class User {
     @Column(nullable = false)
     private boolean isConfirmed;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "lec_info_id")
     private LecturerInfo lecturerInfo;
 

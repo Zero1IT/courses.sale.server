@@ -55,7 +55,7 @@ public class SpringBoot {
     }
 
     @Bean
-    @ConditionalOnProperty(value = "spring.jpa.show-details-sql", havingValue = "true")
+    @ConditionalOnProperty(value = "app.jpa.show-details-sql", havingValue = "true")
     public DataSource dataSource(
             @Value("${spring.datasource.url}") String url,
             @Value("${spring.datasource.username}") String username,

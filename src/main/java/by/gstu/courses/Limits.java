@@ -1,4 +1,4 @@
-package by.gstu.courses.controllers;
+package by.gstu.courses;
 
 /**
  * createdAt: 1/23/2021
@@ -7,6 +7,7 @@ package by.gstu.courses.controllers;
  * @author Alexander Petrushkin
  */
 public final class Limits {
+    public static final int MAX_TOPICS_PER_COURSE = 5;
     public static final int PER_PAGE_MAX = 30;
 
     private Limits() {}

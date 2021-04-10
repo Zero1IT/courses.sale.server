@@ -1,7 +1,7 @@
 package by.gstu.courses.services.impl;
 
-import by.gstu.courses.controllers.response.IncompatiblePermissionsException;
-import by.gstu.courses.controllers.response.ResourceItemNotFoundException;
+import by.gstu.courses.exceptions.IncompatiblePermissionsException;
+import by.gstu.courses.exceptions.ResourceItemNotFoundException;
 import by.gstu.courses.domain.*;
 import by.gstu.courses.repository.RoleRepository;
 import by.gstu.courses.repository.UserRepository;
@@ -115,5 +115,10 @@ public class UserServiceImpl implements UserService {
     public List<User> getList(int page, int limit) {
         return userRepository.findAll(PageRequest.of(page-1, limit, Sort.Direction.DESC, "id"))
                 .getContent();
+    }
+
+    @Override
+    public Optional<User> findUserById(long currentUserId) {
+        return userRepository.findById(currentUserId);
     }
 }

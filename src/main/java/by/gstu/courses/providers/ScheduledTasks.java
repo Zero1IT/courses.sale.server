@@ -30,7 +30,8 @@ public class ScheduledTasks {
             final Query query = session
                     .createQuery("update Course c set c.closed=true where c.startDate < :now");
             query.setParameter("now", Instant.now());
-            query.executeUpdate();
+            final int updated = query.executeUpdate();
+            log.info("closingStartedCourses updated {} rows", updated);
         }
     }
 }

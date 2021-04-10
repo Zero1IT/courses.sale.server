@@ -67,6 +67,6 @@ public class RoleStartInitializer implements ApplicationRunner {
     }
 
     private void populateDefaultPermissions(Set<Permissions.Permission> permissions) {
-        // no perms
+        permissions.add(Permissions.VIEW_PROFILE.entity());
     }
 }

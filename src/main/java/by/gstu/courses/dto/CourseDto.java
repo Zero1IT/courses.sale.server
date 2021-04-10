@@ -1,11 +1,14 @@
 package by.gstu.courses.dto;
 
+import by.gstu.courses.validation.group.UpdateGroup;
+import by.gstu.courses.validation.constraints.NotNullFuture;
+import by.gstu.courses.validation.constraints.NotNullPositive;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
@@ -19,18 +22,16 @@ import java.util.Set;
 @Getter
 @Setter
 public class CourseDto {
-    @PositiveOrZero
+    @NotNullPositive(groups = UpdateGroup.class)
     private Long id;
     @NotBlank
     private String title;
-    @NotNull
+    @NotNullPositive
     private BigDecimal cost;
     private String description;
-    @Future
-    @NotNull
+    @NotNullFuture
     private Instant startDate;
-    @Positive
-    @NotNull
+    @NotNullPositive
     private Short places;
     private String imgUrl;
     private Set<CourseTopicDto> topics;

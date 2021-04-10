@@ -1,6 +1,6 @@
 package by.gstu.courses.controllers.api.courses;
 
-import by.gstu.courses.controllers.Limits;
+import by.gstu.courses.Limits;
 import by.gstu.courses.dto.CourseDto;
 import by.gstu.courses.services.CourseService;
 import lombok.RequiredArgsConstructor;

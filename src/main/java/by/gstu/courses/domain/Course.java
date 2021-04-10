@@ -1,5 +1,6 @@
 package by.gstu.courses.domain;
 
+import by.gstu.courses.Limits;
 import lombok.Data;
 import org.hibernate.annotations.BatchSize;
 
@@ -70,6 +71,6 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "topic_id")
     )
-    @BatchSize(size = 5)
+    @BatchSize(size = Limits.MAX_TOPICS_PER_COURSE)
     private Set<CourseTopic> topics = new HashSet<>();
 }

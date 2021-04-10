@@ -1,17 +1,15 @@
-package by.gstu.courses.controllers.api;
+package by.gstu.courses.controllers.api.users;
 
-import by.gstu.courses.controllers.Limits;
+import by.gstu.courses.Limits;
+import by.gstu.courses.domain.User;
 import by.gstu.courses.dto.UserDto;
 import by.gstu.courses.dto.UserRoleAssignDto;
-import by.gstu.courses.exceptions.DataValidationException;
-import by.gstu.courses.domain.User;
 import by.gstu.courses.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,11 +32,7 @@ public class UserControlController {
     private final UserService userService;
 
     @PostMapping("role")
-    public UserDto changeRole(@RequestBody @Valid UserRoleAssignDto userRoleAssign, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new DataValidationException(bindingResult);
-        }
-
+    public UserDto changeRole(@RequestBody @Valid UserRoleAssignDto userRoleAssign) {
         final User user = userService.changeRole(userRoleAssign.getUserId(), userRoleAssign.getNewRoleName());
         return user != null ? modelMapper.map(user, UserDto.class) : null;
     }

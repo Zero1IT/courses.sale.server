@@ -14,4 +14,5 @@ import java.util.Optional;
  */
 public interface TokenRepository extends CrudRepository<Token, Long> {
     Optional<Token> findByUser(User user);
+    boolean existsByUserIdAndAccessJws(Long userId, String accessJws);
 }

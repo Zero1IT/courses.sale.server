@@ -19,7 +19,7 @@ public final class XSSUtils {
             return null;
         }
 
-        String encoded = ESAPI.encoder()
+        final String encoded = ESAPI.encoder()
                 .canonicalize(value)
                 .replace("\0", "");
         return Jsoup.clean(encoded, Whitelist.none());

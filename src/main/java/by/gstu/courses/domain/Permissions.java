@@ -14,7 +14,8 @@ import java.util.Objects;
 public enum Permissions {
     ALL,
     CONTROL_LECTURE,
-    SIGN_UP_LECTURE;
+    SIGN_UP_LECTURE,
+    VIEW_PROFILE;
 
     public Permission entity() {
         return new Permission(name());

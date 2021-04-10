@@ -1,6 +1,7 @@
 package by.gstu.courses.config.security;
 
 import by.gstu.courses.providers.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,20 +16,21 @@ import org.springframework.security.config.http.SessionCreationPolicy;
  *
  * @author Alexander Petrushkin
  */
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider tokenProvider;
-
-    public SecurityConfig(JwtTokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
-    }
+    private final AuthenticationEntryPointHandler authenticationEntryPoint;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .exceptionHandling(config -> config
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                )
                 .requiresChannel()
                 .anyRequest()
                 .requiresSecure()

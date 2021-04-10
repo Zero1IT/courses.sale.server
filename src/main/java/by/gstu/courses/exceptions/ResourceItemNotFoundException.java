@@ -1,4 +1,4 @@
-package by.gstu.courses.controllers.response;
+package by.gstu.courses.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

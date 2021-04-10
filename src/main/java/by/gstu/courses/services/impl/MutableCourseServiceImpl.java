@@ -1,6 +1,7 @@
 package by.gstu.courses.services.impl;
 
-import by.gstu.courses.controllers.response.ResourceItemNotFoundException;
+import by.gstu.courses.Limits;
+import by.gstu.courses.exceptions.ResourceItemNotFoundException;
 import by.gstu.courses.domain.Course;
 import by.gstu.courses.domain.CourseTopic;
 import by.gstu.courses.domain.User;
@@ -35,7 +36,7 @@ public class MutableCourseServiceImpl implements MutableCourseService {
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
 
-    @Value("${spring.course.image.default}")
+    @Value("${app.course.image.default}")
     private String defaultCourseImagePath;
 
     @Override
@@ -96,23 +97,26 @@ public class MutableCourseServiceImpl implements MutableCourseService {
     @NotNull
     private Course createCourse(Course course, User lecturer) {
         final Set<CourseTopic> usersCourseTopics = course.getTopics();
-        if (usersCourseTopics.size() > 5) {
-            throw new IllegalArgumentException("too much topics"); // TODO: translate
+
+        if (usersCourseTopics != null) {
+            if (usersCourseTopics.size() > Limits.MAX_TOPICS_PER_COURSE) {
+                throw new IllegalArgumentException("too much topics"); // TODO: translate
+            }
+
+            usersCourseTopics.forEach(it -> it.setName(it.getName().toLowerCase())); // to db only lc
+            final HashSet<CourseTopic> courseTopics = new HashSet<>(usersCourseTopics);
+            // TODO: optimize
+            final List<String> topics = courseTopics.stream()
+                    .map(CourseTopic::getName)
+                    .collect(Collectors.toList());
+            final Set<CourseTopic> persistedTopics = courseTopicsRepository.findByNameIn(topics);
+            persistedTopics.addAll(courseTopics);
+            course.setTopics(persistedTopics);
         }
 
-        usersCourseTopics.forEach(it -> it.setName(it.getName().toLowerCase())); // to db only lc
-        final HashSet<CourseTopic> courseTopics = new HashSet<>(usersCourseTopics);
         if (course.getImgUrl() == null) {
             course.setImgUrl(defaultCourseImagePath);
         }
-
-        // TODO: optimize
-        final List<String> topics = courseTopics.stream()
-                .map(CourseTopic::getName)
-                .collect(Collectors.toList());
-        final Set<CourseTopic> persistedTopics = courseTopicsRepository.findByNameIn(topics);
-        persistedTopics.addAll(courseTopics);
-        course.setTopics(persistedTopics);
         course.setId(null);
         course.setClosed(false);
         course.setEnded(false);

@@ -5,16 +5,16 @@ import by.gstu.courses.domain.Course;
 import by.gstu.courses.dto.CourseDto;
 import by.gstu.courses.dto.UserDto;
 import by.gstu.courses.dto.response.EnrollResponse;
-import by.gstu.courses.exceptions.DataValidationException;
 import by.gstu.courses.services.CourseService;
 import by.gstu.courses.services.MutableCourseService;
+import by.gstu.courses.validation.group.UpdateGroup;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -66,11 +66,7 @@ public class CourseController {
 
     @PreAuthorize("hasAuthority(T(by.gstu.courses.domain.Permissions).CONTROL_LECTURE.name())")
     @PostMapping
-    public CourseDto createCourse(@RequestBody @Valid CourseDto courseDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new DataValidationException(bindingResult);
-        }
-
+    public CourseDto createCourse(@RequestBody @Valid CourseDto courseDto) {
         final long userId = AccountInfo.getCurrentUserId();
         final Course course = mutableCourseService.createCourse(modelMapper.map(courseDto, Course.class), userId);
         return course != null ? modelMapper.map(course, CourseDto.class) : null;
@@ -78,11 +74,7 @@ public class CourseController {
 
     @PreAuthorize("hasAuthority(T(by.gstu.courses.domain.Permissions).CONTROL_LECTURE.name())")
     @PutMapping
-    public CourseDto updateCourse(@RequestBody CourseDto courseDto) {
-        if (courseDto.getId() == null) {
-            throw new DataValidationException("[id] must not be null");
-        }
-
+    public CourseDto updateCourse(@RequestBody @Validated(UpdateGroup.class) CourseDto courseDto) {
         final long userId = AccountInfo.getCurrentUserId();
         final Course course = mutableCourseService.updateCourse(modelMapper.map(courseDto, Course.class), userId);
         return course != null ? modelMapper.map(course, CourseDto.class) : null;

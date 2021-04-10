@@ -1,9 +1,8 @@
 package by.gstu.courses.controllers.api;
 
-import by.gstu.courses.dto.AuthenticationDto;
-import by.gstu.courses.exceptions.DataValidationException;
-import by.gstu.courses.exceptions.JwtAuthenticationException;
 import by.gstu.courses.domain.User;
+import by.gstu.courses.dto.AuthenticationDto;
+import by.gstu.courses.exceptions.JwtAuthenticationException;
 import by.gstu.courses.providers.JwtTokenProvider;
 import by.gstu.courses.services.AuthenticateService;
 import by.gstu.courses.services.EmailService;
@@ -13,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 /**
@@ -33,11 +33,11 @@ public class AuthenticateController {
     private final AuthenticateService authenticateService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Value("${host.domain}")
+    @Value("${app.host.domain}")
     private String domain;
-    @Value("${const.verify_link_format}")
+    @Value("${app.const.verify_link_format}")
     private String verifyLinkFormat;
-    @Value("${const.activate_link_format}")
+    @Value("${app.const.activate_link_format}")
     private String activateLinkFormat;
 
     @PostMapping("auto")
@@ -59,21 +59,17 @@ public class AuthenticateController {
 
     @PostMapping("registration")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registration(@RequestBody AuthenticationDto dto) {
-        // TODO: duplicate activation link if not confirmed
+    public void registration(@RequestBody @Valid AuthenticationDto dto) {
+        // TODO: fix duplicate activation link if not confirmed
         final String code = UUID.randomUUID().toString();
         final String link = String.format(verifyLinkFormat, domain, code);
-        if (dto.getPassword() != null && dto.getPassword().equals(dto.getRepeatedPassword())) {
-            final User user = new User();
-            user.setName(dto.getName());
-            user.setLastname(dto.getLastname());
-            user.setEmail(dto.getEmail());
-            user.setPassword(dto.getPassword());
-            user.setPhone(dto.getPhone());
-            emailService.sendActivationLink(user.getEmail(), link, null);
-            authenticateService.registrationUser(user, code);
-        } else {
-            throw new DataValidationException("repeatedPassword", "passwords are not equal"); // TODO: user resource
-        }
+        final User user = new User();
+        user.setName(dto.getName());
+        user.setLastname(dto.getLastname());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        user.setPhone(dto.getPhone());
+        emailService.sendActivationLink(user.getEmail(), link, null);
+        authenticateService.registrationUser(user, code);
     }
 }

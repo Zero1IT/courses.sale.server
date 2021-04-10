@@ -1,10 +1,12 @@
 package by.gstu.courses.services;
 
 import by.gstu.courses.domain.User;
+import by.gstu.courses.dto.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * createdAt: 11/23/2020
@@ -22,4 +24,6 @@ public interface UserService {
     Page<User> getPageByEmail(Pageable pageable, String email);
     User changeRole(Long userId, String newRoleName);
     List<User> getList(int page, int limit);
+
+    Optional<User> findUserById(long currentUserId);
 }

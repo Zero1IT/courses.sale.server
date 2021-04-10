@@ -1,9 +1,9 @@
 package by.gstu.courses.providers;
 
-import by.gstu.courses.controllers.response.ResourceItemNotFoundException;
-import by.gstu.courses.exceptions.JwtAuthenticationException;
 import by.gstu.courses.domain.Token;
 import by.gstu.courses.domain.User;
+import by.gstu.courses.exceptions.JwtAuthenticationException;
+import by.gstu.courses.exceptions.ResourceItemNotFoundException;
 import by.gstu.courses.repository.TokenRepository;
 import by.gstu.courses.repository.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -15,7 +15,6 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,7 +36,6 @@ import java.util.Map;
  */
 @RequiredArgsConstructor
 @Component
-@PropertySource("classpath:jwt.properties")
 public class JwtTokenProvider {
 
     public static final String REFRESH_TOKEN_KEY = "refresh";
@@ -48,15 +46,15 @@ public class JwtTokenProvider {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
 
-    @Value("${jwt.key}")
+    @Value("${app.jwt.key}")
     private String secretKey;
-    @Value("${jwt.expiration_sec}")
+    @Value("${app.jwt.expiration_sec}")
     private long tokenExpiration;
-    @Value("${jwt.refresh_expiration_sec}")
+    @Value("${app.jwt.refresh_expiration_sec}")
     private long refreshExpiration;
-    @Value("${jwt.header}")
+    @Value("${app.jwt.header}")
     private String headerName;
-    @Value("${jwt.prefix}")
+    @Value("${app.jwt.prefix}")
     private String prefix;
 
     public Map<String, String> createTokens(User user) {
@@ -69,12 +67,6 @@ public class JwtTokenProvider {
 
     public Map<String, String> createAndSaveTokens(String email) {
         return createAndSaveTokens(userRepository.findByEmail(email).orElseThrow(ResourceItemNotFoundException::new));
-    }
-
-    public Map<String, String> createAndSaveTokens(User user) {
-        final Map<String, String> tokens = createTokens(user);
-        saveRefreshToken(tokens, user);
-        return tokens;
     }
 
     public Authentication getAuthentication(String token) {
@@ -97,9 +89,10 @@ public class JwtTokenProvider {
                 new JwtAuthenticationException("user doesn't exists"));
         Token oldToken = tokenRepository.findByUser(user).orElseThrow(() ->
                 new JwtAuthenticationException("Token not found"));
-        if (rawToken.equals(oldToken.getJws())) {
+        if (rawToken.equals(oldToken.getRefreshJws())) {
             Map<String, String> tokens = createAndSaveTokens(user);
-            oldToken.setJws(tokens.get(REFRESH_TOKEN_KEY));
+            oldToken.setRefreshJws(tokens.get(REFRESH_TOKEN_KEY));
+            oldToken.setAccessJws(tokens.get(ACCESS_TOKEN_KEY));
             tokenRepository.save(oldToken);
             return tokens;
         }
@@ -108,11 +101,8 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token);
-            return true;
+            final Claims body = getBody(token);
+            return tokenRepository.existsByUserIdAndAccessJws(getId(body), token);
         } catch (ExpiredJwtException e) {
             throw new JwtAuthenticationException("Token is expired. Refresh it", HttpStatus.UNAUTHORIZED);
         } catch (JwtException | IllegalArgumentException e) {
@@ -120,11 +110,17 @@ public class JwtTokenProvider {
         }
     }
 
-    public void saveRefreshToken(Map<String, String> tokens, User user) {
-        final String refresh = tokens.get(REFRESH_TOKEN_KEY);
+    private void saveToken(Map<String, String> tokens, User user) {
         Token token = tokenRepository.findByUser(user).orElse(new Token(user));
-        token.setJws(refresh);
+        token.setRefreshJws(tokens.get(REFRESH_TOKEN_KEY));
+        token.setAccessJws(tokens.get(ACCESS_TOKEN_KEY));
         tokenRepository.save(token);
+    }
+
+    private Map<String, String> createAndSaveTokens(User user) {
+        final Map<String, String> tokens = createTokens(user);
+        saveToken(tokens, user);
+        return tokens;
     }
 
     private String getEmail(String token) {

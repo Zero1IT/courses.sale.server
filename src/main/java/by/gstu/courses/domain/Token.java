@@ -3,6 +3,7 @@ package by.gstu.courses.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 /**
  * createdAt: 11/25/2020
@@ -18,7 +19,10 @@ public class Token {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String jws;
+    @NotBlank
+    private String refreshJws;
+    @NotBlank
+    private String accessJws;
 
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
