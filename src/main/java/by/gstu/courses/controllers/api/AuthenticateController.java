@@ -60,7 +60,6 @@ public class AuthenticateController {
     @PostMapping("registration")
     @ResponseStatus(HttpStatus.CREATED)
     public void registration(@RequestBody @Valid AuthenticationDto dto) {
-        // TODO: fix duplicate activation link if not confirmed
         final String code = UUID.randomUUID().toString();
         final String link = String.format(verifyLinkFormat, domain, code);
         final User user = new User();
@@ -69,7 +68,7 @@ public class AuthenticateController {
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
         user.setPhone(dto.getPhone());
-        emailService.sendActivationLink(user.getEmail(), link, null);
         authenticateService.registrationUser(user, code);
+        emailService.sendActivationLink(user.getEmail(), link, null);
     }
 }

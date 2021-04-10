@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -41,7 +42,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                                                                            @NotNull WebRequest request) {
         final String message = debug ? exception.getMessage() : ""; // TODO: message
         final List<ValidationErrorResponse.ValidationDetails> errors = exception.getBindingResult().getAllErrors().stream()
-                .map(it -> mapToValidationDetails((FieldError) it))
+                .map(this::mapToValidationDetails)
                 .collect(Collectors.toList());
         ErrorResponse response = createErrorResponse(status, request, message, errors);
         return new ResponseEntity<>(response, status);
@@ -84,11 +85,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return request.getDescription(false).replace("uri=", "");
     }
 
-    private ValidationErrorResponse.ValidationDetails mapToValidationDetails(FieldError error) {
+    private ValidationErrorResponse.ValidationDetails mapToValidationDetails(ObjectError error) {
         final ValidationErrorResponse.ValidationDetails details = new ValidationErrorResponse.ValidationDetails();
         details.setCode(error.getCode());
         details.setMessage(error.getDefaultMessage());
-        details.setField(error.getField());
+        if (error instanceof FieldError) {
+            details.setField(((FieldError) error).getField());
+        }
         return details;
     }
 }
