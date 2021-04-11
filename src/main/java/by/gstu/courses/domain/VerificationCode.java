@@ -1,6 +1,8 @@
 package by.gstu.courses.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -10,7 +12,8 @@ import javax.persistence.*;
  *
  * @author Alexander Petrushkin
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "_verifications")
 public class VerificationCode {

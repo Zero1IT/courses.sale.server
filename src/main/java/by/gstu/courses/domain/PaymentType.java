@@ -6,8 +6,9 @@ package by.gstu.courses.domain;
  *
  * @author Alexander Petrushkin
  */
+@Deprecated
 public enum PaymentType {
-    MANUAL((user, t) -> true); // nothing do, all does lecturer
+    MANUAL((user, t) -> true); // nothing do
 
     private final PaymentDescribe paymentDescribe;
     private final PaymentProcessor paymentProcessor;

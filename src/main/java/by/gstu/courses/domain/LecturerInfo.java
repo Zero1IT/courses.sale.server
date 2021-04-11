@@ -21,7 +21,7 @@ public class LecturerInfo {
 
     private boolean canPublish = true;
 
-    @OneToOne(mappedBy = "lecturerInfo")
+    @OneToOne(mappedBy = "lecturerInfo", fetch = FetchType.LAZY)
     private User user;
 
     @OneToMany(mappedBy = "lecturer", fetch = FetchType.LAZY)

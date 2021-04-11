@@ -2,6 +2,9 @@ package by.gstu.courses.domain;
 
 import by.gstu.courses.Limits;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
@@ -16,7 +19,8 @@ import java.util.Set;
  *
  * @author Alexander Petrushkin
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "courses")
 public class Course {

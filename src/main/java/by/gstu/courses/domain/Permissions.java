@@ -16,7 +16,8 @@ public enum Permissions {
     ALL,
     CONTROL_LECTURE,
     SIGN_UP_LECTURE,
-    VIEW_PROFILE;
+    VIEW_PROFILE,
+    TOPIC_CONTROL;
 
     public Permission entity() {
         return new Permission(name());

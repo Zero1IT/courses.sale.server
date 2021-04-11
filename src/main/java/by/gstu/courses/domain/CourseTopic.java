@@ -1,6 +1,8 @@
 package by.gstu.courses.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -14,7 +16,8 @@ import java.util.Set;
  *
  * @author Alexander Petrushkin
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "course_topics")
 public class CourseTopic {
@@ -30,9 +33,9 @@ public class CourseTopic {
     private boolean approved;
 
     @Column(nullable = false)
-    private boolean frozen;
+    private boolean skipped; // hidden for approve
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "topics", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "topics", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<Course> courses = new HashSet<>();
 
     public CourseTopic() { }

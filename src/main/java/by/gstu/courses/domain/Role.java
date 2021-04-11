@@ -2,6 +2,8 @@ package by.gstu.courses.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -14,7 +16,8 @@ import java.util.Set;
  *
  * @author Alexander Petrushkin
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "roles")
 public class Role {

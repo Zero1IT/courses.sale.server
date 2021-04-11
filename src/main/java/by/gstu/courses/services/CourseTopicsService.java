@@ -1,5 +1,8 @@
 package by.gstu.courses.services;
 
+import by.gstu.courses.domain.CourseTopic;
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 /**
@@ -10,4 +13,10 @@ import java.util.List;
  */
 public interface CourseTopicsService {
     List<String> suggest(String name);
+    CourseTopic createTopic(CourseTopic map);
+    CourseTopic updateTopic(CourseTopic topic);
+    Page<CourseTopic> getTopicsPage(int page, int size);
+    Page<CourseTopic> getNotApproved(int page, int size, boolean skipped);
+    Page<CourseTopic> getApproved(int page, int size);
+    void deleteTopicById(long id);
 }

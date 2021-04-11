@@ -54,6 +54,7 @@ public class RoleStartInitializer implements ApplicationRunner {
     private void populateAdminPermissions(Set<Permissions.Permission> permissions) {
         populateLecturerPermissions(permissions);
         permissions.add(Permissions.ALL.entity());
+        permissions.add(Permissions.TOPIC_CONTROL.entity());
     }
 
     private void populateLecturerPermissions(Set<Permissions.Permission> permissions) {
