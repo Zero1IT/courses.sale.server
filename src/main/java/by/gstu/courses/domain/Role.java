@@ -1,5 +1,6 @@
 package by.gstu.courses.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,13 +20,14 @@ import java.util.Set;
 public class Role {
     @Id
     private String name;
-    private boolean programmatically;
-    private boolean changeable;
+    private boolean programmatically; // can be set only programmatically
+    private boolean changeable; // can change permissions
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "permissions", joinColumns = @JoinColumn(name = "role"))
     private Set<Permissions.Permission> permissions = new HashSet<>();
 
+    @JsonIgnore
     @Transient
     public String getWithPrefix() {
         return "ROLE_" + name;

@@ -1,5 +1,6 @@
 package by.gstu.courses.services;
 
+import by.gstu.courses.domain.Permissions;
 import by.gstu.courses.domain.Role;
 
 /**
@@ -10,4 +11,8 @@ import by.gstu.courses.domain.Role;
  */
 public interface RoleService {
     Iterable<Role> getRoles();
+    Iterable<Permissions.Permission> getPermissions();
+    Role createRole(Role role);
+    Role updateRole(Role role);
+    void deleteRoleByName(String name);
 }

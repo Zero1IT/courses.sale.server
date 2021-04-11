@@ -1,5 +1,6 @@
 package by.gstu.courses.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -39,9 +40,9 @@ public enum Permissions {
             this.name = name;
         }
 
-        // for spring security
         @Transient
-        @Override
+        @JsonIgnore
+        @Override // for spring security
         public String getAuthority() {
             return name;
         }
