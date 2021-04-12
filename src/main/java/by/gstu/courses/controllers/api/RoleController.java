@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,10 +51,13 @@ public class RoleController {
         return roleService.updateRole(getRole(roleDto));
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("{name}")
-    public void deleteRole(@PathVariable String name) {
-        roleService.deleteRoleByName(name);
+    public Map<String, Integer> deleteRole(@PathVariable String name, @RequestParam(name = "to") String toRole) {
+        Integer recordsChanges = roleService.deleteRoleByName(name, toRole);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("updated", recordsChanges);
+        return map;
     }
 
     @NotNull
@@ -72,6 +77,4 @@ public class RoleController {
         }
         return role;
     }
-
-
 }

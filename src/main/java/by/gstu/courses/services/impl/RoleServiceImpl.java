@@ -57,8 +57,19 @@ public class RoleServiceImpl implements RoleService {
         throw new UnsupportedOperationException(); // TODO: valid exception
     }
 
+    @Transactional
     @Override
-    public void deleteRoleByName(String name) {
-
+    public int deleteRoleByName(String name, String toRole) {
+        // TODO: shit
+        final Role role = roleRepository.findById(name).orElseThrow(ResourceItemNotFoundException::new);
+        if (role.isChangeable()) {
+            final Role newRole = roleRepository.findById(toRole).orElseThrow(ResourceItemNotFoundException::new);
+            if (!newRole.isProgrammatically() && !role.equals(newRole)) {
+                final int usersChanged = roleRepository.migrateFromRole(role, newRole);
+                roleRepository.delete(role);
+                return usersChanged;
+            }
+        }
+        throw new UnsupportedOperationException(); // TODO shit
     }
 }

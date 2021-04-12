@@ -14,5 +14,5 @@ public interface RoleService {
     Iterable<Permissions.Permission> getPermissions();
     Role createRole(Role role);
     Role updateRole(Role role);
-    void deleteRoleByName(String name);
+    int deleteRoleByName(String name, String toRole);
 }

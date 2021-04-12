@@ -2,6 +2,7 @@ package by.gstu.courses.repository;
 
 import by.gstu.courses.domain.Permissions;
 import by.gstu.courses.domain.Role;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -16,4 +17,7 @@ public interface RoleRepository extends CrudRepository<Role, String> {
     // field permissions
     @Query(value = "select distinct name from permissions" , nativeQuery = true)
     Iterable<Permissions.Permission> selectAllDistinctPermissions();
+    @Modifying
+    @Query(value = "update User u set u.role=:toRole where u.role=:fromRole")
+    int migrateFromRole(Role fromRole, Role toRole);
 }
