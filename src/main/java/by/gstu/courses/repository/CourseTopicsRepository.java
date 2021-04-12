@@ -4,6 +4,7 @@ import by.gstu.courses.domain.CourseTopic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Collection;
@@ -23,4 +24,9 @@ public interface CourseTopicsRepository extends JpaRepository<CourseTopic, Long>
     Page<CourseTopic> findAllByApprovedFalseAndSkippedFalse(Pageable pageable);
     Page<CourseTopic> findAllByApprovedFalseAndSkippedTrue(Pageable pageable);
     Page<CourseTopic> findAllByApprovedTrue(Pageable pageable);
+
+    // native
+    @Modifying
+    @Query(value = "delete from courses_to_topics where topic_id=:id", nativeQuery = true)
+    int deleteFromIntermediateTableByTopicId(long id);
 }

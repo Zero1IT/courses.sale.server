@@ -62,9 +62,14 @@ public class CourseTopicsServiceImpl implements CourseTopicsService {
         return courseTopicsRepository.findAllByApprovedTrue(PageRequest.of(page-1, size));
     }
 
+    @Transactional
     @Override
-    public void deleteTopicById(long id) {
-        courseTopicsRepository.deleteById(id);
+    public int deleteTopicById(long id) {
+        // TODO: exception
+        final CourseTopic topic = courseTopicsRepository.findById(id).orElseThrow(ResourceItemNotFoundException::new);
+        final int deleted = courseTopicsRepository.deleteFromIntermediateTableByTopicId(topic.getId());
+        courseTopicsRepository.delete(topic);
+        return deleted;
     }
 
     private CourseTopic setupTopic(CourseTopic source, CourseTopic destination) {

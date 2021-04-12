@@ -13,7 +13,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * createdAt: 4/4/2021
@@ -74,10 +76,13 @@ public class CourseTopicController {
         return mapper.map(courseTopicsService.updateTopic(mapper.map(dto, CourseTopic.class)), CourseTopicDto.class);
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority(T(by.gstu.courses.domain.Permissions).TOPIC_CONTROL.name())")
     @DeleteMapping("{id}")
-    public void deleteTopic(@PathVariable long id) {
-        courseTopicsService.deleteTopicById(id);
+    public Map<String, Integer> deleteTopic(@PathVariable long id) {
+        Integer recordsChanges = courseTopicsService.deleteTopicById(id);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("deleted", recordsChanges);
+        return map;
     }
 }

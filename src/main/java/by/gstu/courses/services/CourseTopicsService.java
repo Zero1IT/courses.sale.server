@@ -18,5 +18,5 @@ public interface CourseTopicsService {
     Page<CourseTopic> getTopicsPage(int page, int size);
     Page<CourseTopic> getNotApproved(int page, int size, boolean skipped);
     Page<CourseTopic> getApproved(int page, int size);
-    void deleteTopicById(long id);
+    int deleteTopicById(long id);
 }
